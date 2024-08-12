@@ -286,8 +286,6 @@ namespace FreeDraw
             drawable_texture.SetPixels(clean_colours_array);
             drawable_texture.Apply();
         }
-
-
         
         void Awake()
         {
