@@ -7,11 +7,12 @@ using Photon.Realtime;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private Text ServerText;
     [SerializeField] private string testname;
-    private List<string> playerNicknames = new List<string>();
-    public Text playerListText;
+    [SerializeField] private InputField Roominput;
+    [SerializeField] private Button[] Room_Btu;
+    private RoomOptions RoomSetting = new RoomOptions { MaxPlayers = 8, IsVisible = true, IsOpen = true };
 
+    #region 서버 접속을 위한용도
     void Awake()
     {
         Connect();
@@ -19,49 +20,68 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        ServerText.text = (PhotonNetwork.CountOfPlayers) + "명 접속중";
+        //ServerText.text = (PhotonNetwork.CountOfPlayers) + "명 접속중";
     }
 
     public void Connect()
     {
-        Debug.Log("서버에 접속 중");
-
-        PhotonNetwork.AutomaticallySyncScene = true;
-        PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.ConnectUsingSettings(); // 서버 연결시작
     }
 
-    public override void OnConnectedToMaster()
+    public override void OnConnectedToMaster() // 서버 연결 완료되면 반환되는 메소드
     {
-        Debug.Log("서버에 연결 완료");
-        PhotonNetwork.NickName = testname;
-        playerNicknames.Add(PhotonNetwork.NickName);
-        PhotonNetwork.JoinLobby();
+        PhotonNetwork.JoinLobby(); // 로비 접속 시작
     }
 
-    public override void OnJoinedLobby()
+    public override void OnJoinedLobby() // 로비 접속 완료되면 반환되는 메소드
     {
-        Debug.Log("로비에 연결 완료");
-        UpdatePlayerListText();
+        Debug.Log("로비 연결");
+    }
+    #endregion
+
+    #region 방생성 관련
+    public void CreateRoom()
+    {
+        PhotonNetwork.CreateRoom(Roominput.text == "" ? "Room" + Random.Range(0, 100) : Roominput.text, RoomSetting);
     }
 
-    public override void OnLeftLobby()
+    public override void OnCreatedRoom() // 방생성에 성공하면 나오는 메소드
     {
-        Debug.Log("로비에서 퇴장");
-        playerNicknames.Remove(PhotonNetwork.NickName);
-        UpdatePlayerListText();
+        Debug.Log("방생성 완료");
     }
 
-    public void test()
+    public override void OnRoomListUpdate(List<RoomInfo> roomList) // 방이 새로 생성됬다면 호출되는 메소드
     {
-        PhotonNetwork.LeaveLobby();
-    }
+        Debug.Log("Test");
 
-    private void UpdatePlayerListText()
-    {
-        foreach (string nickname in playerNicknames)
+        for (int i = 0; i < roomList.Count && i < Room_Btu.Length; i++)
         {
-            playerListText.text += nickname + "\n";
+            RoomInfo room = roomList[i];
+            Button roomButton = Room_Btu[i];
+
+
+            // 버튼의 텍스트 설정 (Button 아래에 있는 Text 컴포넌트를 찾아서 설정)
+            Text buttonText = roomButton.GetComponentInChildren<Text>();
+            buttonText.text = $"{room.Name} ({room.PlayerCount}/{room.MaxPlayers})";
         }
     }
+    #endregion
+
+    #region 게임 종료
+    public void GameExit()
+    {
+        PhotonNetwork.LeaveLobby(); // 로비나가기
+        PhotonNetwork.Disconnect(); // 서버연결종료
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+        #else
+        Application.Quit();
+        #endif
+    }
+    #endregion
 
 }
