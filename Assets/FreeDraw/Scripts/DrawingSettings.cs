@@ -12,7 +12,7 @@ namespace FreeDraw
         public float Transparency = 1f;
 
         // Changing pen settings is easy as changing the static properties Drawable.Pen_Colour and Drawable.Pen_Width
-        public void SetMarkerColour(Color new_color)
+        public void SetMarkerColor(Color new_color)
         {
             Drawable.Pen_Colour = new_color;
         }
@@ -40,31 +40,31 @@ namespace FreeDraw
         {
             Color c = Color.red;
             c.a = Transparency;
-            SetMarkerColour(c);
+            SetMarkerColor(c);
             Drawable.drawable.SetPenBrush();
         }
         public void SetMarkerGreen()
         {
             Color c = Color.green;
             c.a = Transparency;
-            SetMarkerColour(c);
+            SetMarkerColor(c);
             Drawable.drawable.SetPenBrush();
         }
         public void SetMarkerBlue()
         {
             Color c = Color.blue;
             c.a = Transparency;
-            SetMarkerColour(c);
+            SetMarkerColor(c);
             Drawable.drawable.SetPenBrush();
         }
         public void SetEraser()
         {
-            SetMarkerColour(new Color(255f, 255f, 255f, 0f));
+            SetMarkerColor(new Color(255f, 255f, 255f, 0f));
         }
 
         public void PartialSetEraser()
         {
-            SetMarkerColour(new Color(255f, 255f, 255f, 0.5f));
+            SetMarkerColor(new Color(255f, 255f, 255f, 0.5f));
         }
     }
 }
