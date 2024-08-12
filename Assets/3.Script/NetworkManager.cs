@@ -10,7 +10,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] private string testname;
     [SerializeField] private InputField Roominput;
     [SerializeField] private Button[] Room_Btu;
-    private RoomOptions RoomSetting = new RoomOptions { MaxPlayers = 8, IsVisible = true, IsOpen = true };
+    private RoomOptions RoomSetting = new RoomOptions { MaxPlayers = 8, IsVisible = true, IsOpen = true, EmptyRoomTtl = 0 };
 
     #region 서버 접속을 위한용도
     void Awake()
