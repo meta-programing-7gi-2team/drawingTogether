@@ -22,6 +22,7 @@ public class Setup_Login_Controller : MonoBehaviourPunCallbacks
     [SerializeField] private TextMeshProUGUI S_Log;
     [SerializeField] private GameObject SetUp_UI;
 
+
     public void Login_Btn()
     {
         if (ID_input.text.Equals(string.Empty) || Password_input.text.Equals(string.Empty))
