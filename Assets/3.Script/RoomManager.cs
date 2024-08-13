@@ -23,10 +23,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
         Debug.Log("방생성 완료");
     }
 
-    public override void OnRoomListUpdate(List<RoomInfo> roomList) // 방이 새로 생성됬다면 호출되는 메소드
+    public override void OnRoomListUpdate(List<RoomInfo> roomList) // 방이 새로 생성되었다면 호출되는 메소드
     {
-        Debug.Log("Test");
-
         for (int i = 0; i < Room_Btu.Length; i++)
         {
             Button roomButton = Room_Btu[i];
@@ -36,6 +34,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
             RoomText.text = string.Empty;
             PlayerText.text = string.Empty;
+
+            roomButton.interactable = false;
         }
 
         for (int i = 0; i < roomList.Count && i < Room_Btu.Length; i++)
@@ -48,7 +48,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 continue;
             }
 
-            // 버튼의 텍스트 설정 (Button 아래에 있는 Text 컴포넌트를 찾아서 설정)
+            roomButton.interactable = true;
+
             Text RoomText = roomButton.transform.GetChild(0).GetComponent<Text>();
             Text PlayerText = roomButton.transform.GetChild(1).GetComponent<Text>();
             RoomText.text = room.Name;
