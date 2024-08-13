@@ -31,6 +31,10 @@ public class RandomWord : MonoBehaviour
         {
             // 랜덤으로 단어 선택
             string randomWord = words[random.Next(words.Length)];
+            while (text.text.Equals(randomWord))
+            {
+                randomWord = words[random.Next(words.Length)];
+            }
             text.text = randomWord;
         }
         else
