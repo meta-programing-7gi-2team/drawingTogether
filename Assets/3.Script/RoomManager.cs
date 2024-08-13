@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
@@ -29,6 +30,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public override void OnCreatedRoom() // 방생성에 성공하면 나오는 메소드
     {
         Debug.Log("방생성 완료");
+        SceneManager.LoadScene("IngameUI");
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList) // 방이 새로 생성되었다면 호출되는 메소드
