@@ -12,12 +12,14 @@ public class User_info
     public string User_ID { get; private set; }
     public string User_Password { get; private set; }
     public string User_Name { get; private set; }
+    public string User_Image { get; private set; }
 
-    public User_info(string id, string password, string name)
+    public User_info(string id, string password, string name, string Image)
     {
         User_ID = id;
         User_Password = password;
         User_Name = name;
+        User_Image = Image;
     }
 }
 
@@ -110,10 +112,11 @@ public class UserInfo_Manager : MonoBehaviour
                     string Id = (reader.IsDBNull(0)) ? string.Empty : (string)reader["User_ID"];
                     string Pass = (reader.IsDBNull(1)) ? string.Empty : (string)reader["User_Password"];
                     string Name = (reader.IsDBNull(2)) ? string.Empty : (string)reader["User_Name"];
+                    string lmage = (reader.IsDBNull(3)) ? string.Empty : (string)reader["Image"];
 
                     if (!Id.Equals(string.Empty) || !Pass.Equals(string.Empty))
                     {
-                        info = new User_info(Id, Pass, Name);
+                        info = new User_info(Id, Pass, Name, lmage);
 
                         if (!reader.IsClosed) reader.Close();
                         return true;
@@ -143,7 +146,7 @@ public class UserInfo_Manager : MonoBehaviour
             {
                 return false;
             }
-            string SQL_Commane = string.Format($@"INSERT INTO user_info VALUES ('{id}', '{password}', '{name}', 'IM001');");
+            string SQL_Commane = string.Format($@"INSERT INTO user_info VALUES ('{id}', '{password}', '{name}', 'IM000');");
             MySqlCommand cmd = new MySqlCommand(SQL_Commane, connection);
             reader = cmd.ExecuteReader();
 

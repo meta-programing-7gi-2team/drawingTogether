@@ -31,7 +31,7 @@ public class Setup_Login_Controller : MonoBehaviour
         {
             User_info info = UserInfo_Manager.instance.info;
             Login_UI.SetActive(false);
-            SceneManager.LoadScene("Network");
+            NetworkManager.instance.Connect();
             Debug.Log(info.User_ID + " | " + info.User_Password + "로그인 성공!");
         }
         else
