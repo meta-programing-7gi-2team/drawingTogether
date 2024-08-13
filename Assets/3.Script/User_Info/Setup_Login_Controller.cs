@@ -34,6 +34,7 @@ public class Setup_Login_Controller : MonoBehaviourPunCallbacks
         {
             User_info info = UserInfo_Manager.instance.info;
             Loding_UI.SetActive(true);
+            Log.text = string.Empty;
             NetworkManager.instance.Connect();
             Debug.Log(info.User_ID + " | " + info.User_Password + "로그인 성공!");
         }
@@ -46,6 +47,7 @@ public class Setup_Login_Controller : MonoBehaviourPunCallbacks
     public void SetActive_SetUpUI()
     {
         Login_UI.SetActive(false);
+        Log.text = string.Empty;
         SetUp_UI.SetActive(true);
     }
 
@@ -61,11 +63,12 @@ public class Setup_Login_Controller : MonoBehaviourPunCallbacks
         {
             User_info info = UserInfo_Manager.instance.info;
             SetUp_UI.SetActive(false);
+            S_Log.text = string.Empty;
             Login_UI.SetActive(true);
         }
         else
         {
-            S_Log.text = "회원가입에 실패하셨습니다.";
+            S_Log.text = "아이디가 중복되었습니다. \n다시 입력해주세요.";
         }
     }
 

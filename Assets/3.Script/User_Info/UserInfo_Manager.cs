@@ -146,10 +146,21 @@ public class UserInfo_Manager : MonoBehaviour
             {
                 return false;
             }
-            string SQL_Commane = string.Format($@"INSERT INTO user_info VALUES ('{id}', '{password}', '{name}', 'IM000');");
-            MySqlCommand cmd = new MySqlCommand(SQL_Commane, connection);
-            reader = cmd.ExecuteReader();
 
+            string Overlap_Check = string.Format($@"SELECT User_ID, User_Password, User_Name, Image FROM user_info WHERE User_ID='{id}';");
+            MySqlCommand chkcmd = new MySqlCommand(Overlap_Check, connection);
+            reader = chkcmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                if (!reader.IsClosed) reader.Close();
+                return false;
+            }
+            if (!reader.IsClosed) reader.Close();
+
+            string SQL_Command = string.Format($@"INSERT INTO user_info VALUES ('{id}', '{password}', '{name}', 'IM000');");
+            MySqlCommand cmd = new MySqlCommand(SQL_Command, connection);
+            reader = cmd.ExecuteReader();
+            
             if (!reader.IsClosed) reader.Close();
             return true;
         }
