@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -79,7 +80,15 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public void JoinRoom()
     {
+        GameObject clickedButton = EventSystem.current.currentSelectedGameObject;
+        string roomName = clickedButton.transform.GetChild(0).GetComponent<Text>().text;
+        PhotonNetwork.JoinRoom(roomName);
+    }
 
+    public override void OnJoinedRoom()
+    {
+        Debug.Log("Successfully joined room: " + PhotonNetwork.CurrentRoom.Name);
+        SceneManager.LoadScene("IngameUI");
     }
     #endregion
 }

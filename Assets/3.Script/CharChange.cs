@@ -24,10 +24,9 @@ public class CharChange : MonoBehaviour
     public void Image_Complete()
     {
         UserInfo_Manager.instance.info.User_Image = Image_Num;
-        // db데이터 전송
+        UserInfo_Manager.instance.Change(UserInfo_Manager.instance.info.User_ID, UserInfo_Manager.instance.info.User_Password, UserInfo_Manager.instance.info.User_Name, Image_Num);
         UserImage.sprite = Resources.Load<Sprite>($"Player_Image/{Image_Num}");
         gameObject.SetActive(false);
         Image_Num = string.Empty;
     }
-
 }
