@@ -14,7 +14,7 @@ namespace FreeDraw
         // Changing pen settings is easy as changing the static properties Drawable.Pen_Colour and Drawable.Pen_Width
         public void SetMarkerColor(Color new_color)
         {
-            Drawable.Pen_Colour = new_color;
+            Drawable.Pen_Color = new_color;
         }
         // new_width is radius in pixels
         public void SetMarkerWidth(int new_width)
@@ -29,9 +29,17 @@ namespace FreeDraw
         public void SetTransparency(float amount)
         {
             Transparency = amount;
-            Color c = Drawable.Pen_Colour;
+            Color c = Drawable.Pen_Color;
             c.a = amount;
-            Drawable.Pen_Colour = c;
+            Drawable.Pen_Color = c;
+        }
+        public void SetPaint()
+        {
+            Drawable.Pen_Mode = PenMode.Paint;
+        }
+        public void SetPen()
+        {
+            Drawable.Pen_Mode = PenMode.Pen;
         }
 
 

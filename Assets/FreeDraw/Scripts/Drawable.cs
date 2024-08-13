@@ -1,6 +1,13 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
+public enum PenMode
+{
+    Pen,
+    Paint
+}
 
 namespace FreeDraw
 {
@@ -12,10 +19,12 @@ namespace FreeDraw
     // 4. Hold down left mouse to draw on this texture!
     public class Drawable : MonoBehaviour
     {
-        // PEN COLOUR
-        public static Color Pen_Colour = Color.red;     // Change these to change the default drawing settings
+        // PEN color
+        public static Color Pen_Color = Color.red;     // Change these to change the default drawing settings
         // PEN WIDTH (actually, it's a radius, in pixels)
         public static int Pen_Width = 3;
+
+        public static PenMode Pen_Mode = PenMode.Pen;
 
 
         public delegate void Brush_Function(Vector2 world_position);
@@ -27,8 +36,8 @@ namespace FreeDraw
         public LayerMask Drawing_Layers;
 
         public bool Reset_Canvas_On_Play = true;
-        // The colour the canvas is reset to each time
-        public Color Reset_Colour = new Color(0, 0, 0, 0);  // By default, reset the canvas to be transparent
+        // The color the canvas is reset to each time
+        public Color Reset_color = new Color(0, 0, 0, 0);  // By default, reset the canvas to be transparent
 
         // Used to reference THIS specific file without making all methods static
         public static Drawable drawable;
@@ -37,7 +46,7 @@ namespace FreeDraw
         Texture2D drawable_texture;
 
         Vector2 previous_drag_position;
-        Color[] clean_colours_array;
+        Color[] clean_colors_array;
         Color transparent;
         Color32[] cur_colors;
         bool mouse_was_previously_held_down = false;
@@ -72,14 +81,14 @@ namespace FreeDraw
             {
                 // THIS IS THE FIRST CLICK
                 // FILL IN WHATEVER YOU WANT TO DO HERE
-                // Maybe mark multiple pixels to colour?
-                MarkPixelsToColour(pixel_pos, Pen_Width, Pen_Colour);
+                // Maybe mark multiple pixels to color?
+                MarkPixelsTocolor(pixel_pos, Pen_Width, Pen_Color);
             }
             else
             {
                 // THE USER IS DRAGGING
                 // Should we do stuff between the previous mouse position and the current one?
-                ColourBetween(previous_drag_position, pixel_pos, Pen_Width, Pen_Colour);
+                colorBetween(previous_drag_position, pixel_pos, Pen_Width, Pen_Color);
             }
             ////////////////////////////////////////////////////////////////
 
@@ -94,9 +103,9 @@ namespace FreeDraw
 
 
         
-        // Default brush type. Has width and colour.
+        // Default brush type. Has width and color.
         // Pass in a point in WORLD coordinates
-        // Changes the surrounding pixels of the world_point to the static pen_colour
+        // Changes the surrounding pixels of the world_point to the static pen_color
         public void PenBrush(Vector2 world_point)
         {
             Vector2 pixel_pos = WorldToPixelCoordinates(world_point);
@@ -105,13 +114,13 @@ namespace FreeDraw
 
             if (previous_drag_position == Vector2.zero)
             {
-                // If this is the first time we've ever dragged on this image, simply colour the pixels at our mouse position
-                MarkPixelsToColour(pixel_pos, Pen_Width, Pen_Colour);
+                // If this is the first time we've ever dragged on this image, simply color the pixels at our mouse position
+                MarkPixelsTocolor(pixel_pos, Pen_Width, Pen_Color);
             }
             else
             {
-                // Colour in a line from where we were on the last update call
-                ColourBetween(previous_drag_position, pixel_pos, Pen_Width, Pen_Colour);
+                // color in a line from where we were on the last update call
+                colorBetween(previous_drag_position, pixel_pos, Pen_Width, Pen_Color);
             }
             ApplyMarkedPixelChanges();
 
@@ -127,7 +136,7 @@ namespace FreeDraw
             // PenBrush is the NAME of the method we want to set as our current brush
             current_brush = PenBrush;
         }
-//////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -145,24 +154,31 @@ namespace FreeDraw
                 // Convert mouse coordinates to world coordinates
                 Vector2 mouse_world_position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-                // Check if the current mouse position overlaps our image
-                Collider2D hit = Physics2D.OverlapPoint(mouse_world_position, Drawing_Layers.value);
-                if (hit != null && hit.transform != null)
+                if(Pen_Mode.Equals(PenMode.Paint))
                 {
-                    // We're over the texture we're drawing on!
-                    // Use whatever function the current brush is
-                    current_brush(mouse_world_position);
+                    FloodFill(mouse_world_position, Pen_Color);
                 }
-
-                else
+                else if(Pen_Mode.Equals(PenMode.Pen))
                 {
-                    // We're not over our destination texture
-                    previous_drag_position = Vector2.zero;
-                    if (!mouse_was_previously_held_down)
+                    // Check if the current mouse position overlaps our image
+                    Collider2D hit = Physics2D.OverlapPoint(mouse_world_position, Drawing_Layers.value);
+                    if (hit != null && hit.transform != null)
                     {
-                        // This is a new drag where the user is left clicking off the canvas
-                        // Ensure no drawing happens until a new drag is started
-                        no_drawing_on_current_drag = true;
+                        // We're over the texture we're drawing on!
+                        // Use whatever function the current brush is
+                        current_brush(mouse_world_position);
+                    }
+
+                    else
+                    {
+                        // We're not over our destination texture
+                        previous_drag_position = Vector2.zero;
+                        if (!mouse_was_previously_held_down)
+                        {
+                            // This is a new drag where the user is left clicking off the canvas
+                            // Ensure no drawing happens until a new drag is started
+                            no_drawing_on_current_drag = true;
+                        }
                     }
                 }
             }
@@ -177,8 +193,8 @@ namespace FreeDraw
 
 
 
-        // Set the colour of pixels in a straight line from start_point all the way to end_point, to ensure everything inbetween is coloured
-        public void ColourBetween(Vector2 start_point, Vector2 end_point, int width, Color color)
+        // Set the color of pixels in a straight line from start_point all the way to end_point, to ensure everything inbetween is colored
+        public void colorBetween(Vector2 start_point, Vector2 end_point, int width, Color color)
         {
             // Get the distance from start to finish
             float distance = Vector2.Distance(start_point, end_point);
@@ -192,7 +208,7 @@ namespace FreeDraw
             for (float lerp = 0; lerp <= 1; lerp += lerp_steps)
             {
                 cur_position = Vector2.Lerp(start_point, end_point, lerp);
-                MarkPixelsToColour(cur_position, width, color);
+                MarkPixelsTocolor(cur_position, width, color);
             }
         }
 
@@ -200,9 +216,9 @@ namespace FreeDraw
 
 
 
-        public void MarkPixelsToColour(Vector2 center_pixel, int pen_thickness, Color color_of_pen)
+        public void MarkPixelsTocolor(Vector2 center_pixel, int pen_thickness, Color color_of_pen)
         {
-            // Figure out how many pixels we need to colour in each direction (x and y)
+            // Figure out how many pixels we need to color in each direction (x and y)
             int center_x = (int)center_pixel.x;
             int center_y = (int)center_pixel.y;
             //int extra_radius = Mathf.Min(0, pen_thickness - 2);
@@ -237,12 +253,12 @@ namespace FreeDraw
         }
 
 
-        // Directly colours pixels. This method is slower than using MarkPixelsToColour then using ApplyMarkedPixelChanges
+        // Directly colors pixels. This method is slower than using MarkPixelsTocolor then using ApplyMarkedPixelChanges
         // SetPixels32 is far faster than SetPixel
-        // Colours both the center pixel, and a number of pixels around the center pixel based on pen_thickness (pen radius)
-        public void ColourPixels(Vector2 center_pixel, int pen_thickness, Color color_of_pen)
+        // colors both the center pixel, and a number of pixels around the center pixel based on pen_thickness (pen radius)
+        public void colorPixels(Vector2 center_pixel, int pen_thickness, Color color_of_pen)
         {
-            // Figure out how many pixels we need to colour in each direction (x and y)
+            // Figure out how many pixels we need to color in each direction (x and y)
             int center_x = (int)center_pixel.x;
             int center_y = (int)center_pixel.y;
             //int extra_radius = Mathf.Min(0, pen_thickness - 2);
@@ -257,7 +273,49 @@ namespace FreeDraw
 
             drawable_texture.Apply();
         }
+        public void FloodFill(Vector2 startPosition, Color fillcolor)
+        {
+            // Convert start position to pixel coordinates
+            Vector2 pixelPos = WorldToPixelCoordinates(startPosition);
+            int x = (int)pixelPos.x;
+            int y = (int)pixelPos.y;
 
+            // Get the current color at the starting pixel
+            Color targetColor = drawable_texture.GetPixel(x, y);
+
+            // If the target color is the same as the fill color, return (nothing to fill)
+            if (targetColor == fillcolor)
+                return;
+
+            // Perform flood fill
+            Queue<Vector2> pixels = new Queue<Vector2>();
+            pixels.Enqueue(new Vector2(x, y));
+
+            while (pixels.Count > 0)
+            {
+                Vector2 currentPixel = pixels.Dequeue();
+                int px = (int)currentPixel.x;
+                int py = (int)currentPixel.y;
+
+                if (px < 0 || px >= drawable_texture.width || py < 0 || py >= drawable_texture.height)
+                    continue;
+
+                Color currentColor = drawable_texture.GetPixel(px, py);
+
+                if (currentColor == targetColor)
+                {
+                    drawable_texture.SetPixel(px, py, fillcolor);
+
+                    // Enqueue neighboring pixels
+                    pixels.Enqueue(new Vector2(px - 1, py));
+                    pixels.Enqueue(new Vector2(px + 1, py));
+                    pixels.Enqueue(new Vector2(px, py - 1));
+                    pixels.Enqueue(new Vector2(px, py + 1));
+                }
+            }
+
+            drawable_texture.Apply();
+        }
 
         public Vector2 WorldToPixelCoordinates(Vector2 world_position)
         {
@@ -280,10 +338,10 @@ namespace FreeDraw
         }
 
 
-        // Changes every pixel to be the reset colour
+        // Changes every pixel to be the reset color
         public void ResetCanvas()
         {
-            drawable_texture.SetPixels(clean_colours_array);
+            drawable_texture.SetPixels(clean_colors_array);
             drawable_texture.Apply();
         }
         
@@ -297,9 +355,9 @@ namespace FreeDraw
             drawable_texture = drawable_sprite.texture;
 
             // Initialize clean pixels to use
-            clean_colours_array = new Color[(int)drawable_sprite.rect.width * (int)drawable_sprite.rect.height];
-            for (int x = 0; x < clean_colours_array.Length; x++)
-                clean_colours_array[x] = Reset_Colour;
+            clean_colors_array = new Color[(int)drawable_sprite.rect.width * (int)drawable_sprite.rect.height];
+            for (int x = 0; x < clean_colors_array.Length; x++)
+                clean_colors_array[x] = Reset_color;
 
             // Should we reset our canvas image when we hit play in the editor?
             if (Reset_Canvas_On_Play)
