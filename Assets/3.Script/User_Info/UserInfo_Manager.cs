@@ -190,4 +190,31 @@ public class UserInfo_Manager : MonoBehaviour
             return false;
         }
     }
+
+    public bool Change(string id, string password, string name, string image)
+    {
+        try
+        {
+            if (!connection_Check(connection))
+            {
+                return false;
+            }
+
+            string SQL_Command = "UPDATE User_info SET Image = @image WHERE User_Name = @name";
+            MySqlCommand cmd = new MySqlCommand(SQL_Command, connection);
+            cmd.Parameters.AddWithValue("@name", name);
+            cmd.Parameters.AddWithValue("@Image", image);
+
+            info = new User_info(id, password, name, image);
+
+            int NonQuery = cmd.ExecuteNonQuery();
+
+            return NonQuery > 0;
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
+            return false;
+        }
+    }
 }
