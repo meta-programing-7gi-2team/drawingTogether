@@ -29,4 +29,5 @@ public class CharChange : MonoBehaviour
         gameObject.SetActive(false);
         Image_Num = string.Empty;
     }
+
 }
