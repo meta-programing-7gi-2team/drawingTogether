@@ -8,6 +8,7 @@ using Photon.Realtime;
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     public static NetworkManager instance = null;
+    public string Image_F; // DB연결해서DB에있는 이미지 파일가져와야함
 
     #region 서버 접속을 위한용도
     void Awake()
@@ -33,16 +34,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void Connect()
     {
         PhotonNetwork.ConnectUsingSettings(); // 서버 연결시작
+        Image_F = "IM010";
+        PhotonNetwork.NickName = "테스터";
     }
 
     public override void OnConnectedToMaster() // 서버 연결 완료되면 반환되는 메소드
     {
         PhotonNetwork.JoinLobby(); // 로비 접속 시작
-    }
-
-    public override void OnJoinedLobby() // 로비 접속 완료되면 반환되는 메소드
-    {
-        Debug.Log("로비 연결");
     }
     #endregion
 

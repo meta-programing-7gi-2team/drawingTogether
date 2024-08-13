@@ -9,8 +9,16 @@ public class RoomManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private InputField Roominput;
     [SerializeField] private Button[] Room_Btu;
+    [SerializeField] private Text Nickname;
+    [SerializeField] private Image UserImage;
     private RoomOptions RoomSetting = new RoomOptions { MaxPlayers = 8, IsVisible = true, IsOpen = true, EmptyRoomTtl = 0 };
 
+    public override void OnJoinedLobby() // 로비 접속 완료되면 반환되는 메소드
+    {
+        Sprite playerSprite = Resources.Load<Sprite>($"Player_Image/{NetworkManager.instance.Image_F}");
+        UserImage.sprite = playerSprite;
+        Nickname.text = ($"{PhotonNetwork.NickName} 님");
+    }
 
     #region 방관련
     public void CreateRoom()
@@ -55,6 +63,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
             RoomText.text = room.Name;
             PlayerText.text = $"({room.PlayerCount}/{room.MaxPlayers})";
         }
+    }
+
+    public void JoinRoom()
+    {
+
     }
     #endregion
 }
