@@ -1,8 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 public enum PenMode
 {
@@ -107,16 +104,15 @@ public class Drawable : MonoBehaviour
         mouse_was_previously_held_down = mouse_held_down;
     }
 
-    // Set the color of pixels in a straight line from start_point all the way to end_point, to ensure everything inbetween is colored
+    // 시작점부터 끝점까지 색상 표시
     public void colorBetween(Vector2 start_point, Vector2 end_point, int width, Color color)
     {
-        // Get the distance from start to finish
+        // 거리 계산
         float distance = Vector2.Distance(start_point, end_point);
-        Vector2 direction = (start_point - end_point).normalized;
 
         Vector2 cur_position = start_point;
 
-        // Calculate how many times we should interpolate between start_point and end_point based on the amount of time that has passed since the last update
+        // 보간 횟수 계산
         float lerp_steps = 1 / distance;
 
         for (float lerp = 0; lerp <= 1; lerp += lerp_steps)
@@ -128,14 +124,12 @@ public class Drawable : MonoBehaviour
 
     public void MarkPixelsTocolor(Vector2 center_pixel, int pen_thickness, Color color_of_pen)
     {
-        // Figure out how many pixels we need to color in each direction (x and y)
         int center_x = (int)center_pixel.x;
         int center_y = (int)center_pixel.y;
-        //int extra_radius = Mathf.Min(0, pen_thickness - 2);
 
         for (int x = center_x - pen_thickness; x <= center_x + pen_thickness; x++)
         {
-            // Check if the X wraps around the image, so we don't draw pixels on the other side of the image
+            // 이미지의 다른 쪽에 픽셀을 그리지 않는지 확인
             if (x >= (int)drawable_sprite.rect.width || x < 0)
                 continue;
 
@@ -147,10 +141,10 @@ public class Drawable : MonoBehaviour
     }
     public void MarkPixelToChange(int x, int y, Color color)
     {
-        // Need to transform x and y coordinates to flat coordinates of array
+        // 좌표 변환
         int array_pos = y * (int)drawable_sprite.rect.width + x;
 
-        // Check if this is a valid position
+        // index 위치 체크
         if (array_pos > cur_colors.Length || array_pos < 0)
             return;
 
@@ -162,42 +156,20 @@ public class Drawable : MonoBehaviour
         drawable_texture.Apply();
     }
 
-
-    // Directly colors pixels. This method is slower than using MarkPixelsTocolor then using ApplyMarkedPixelChanges
-    // SetPixels32 is far faster than SetPixel
-    // colors both the center pixel, and a number of pixels around the center pixel based on pen_thickness (pen radius)
-    public void colorPixels(Vector2 center_pixel, int pen_thickness, Color color_of_pen)
-    {
-        // Figure out how many pixels we need to color in each direction (x and y)
-        int center_x = (int)center_pixel.x;
-        int center_y = (int)center_pixel.y;
-        //int extra_radius = Mathf.Min(0, pen_thickness - 2);
-
-        for (int x = center_x - pen_thickness; x <= center_x + pen_thickness; x++)
-        {
-            for (int y = center_y - pen_thickness; y <= center_y + pen_thickness; y++)
-            {
-                drawable_texture.SetPixel(x, y, color_of_pen);
-            }
-        }
-
-        drawable_texture.Apply();
-    }
     public void FloodFill(Vector2 startPosition, Color fillcolor)
     {
-        // Convert start position to pixel coordinates
+        // 시작 위치를 픽셀 좌표로 변환
         Vector2 pixelPos = WorldToPixelCoordinates(startPosition);
         int x = (int)pixelPos.x;
         int y = (int)pixelPos.y;
 
-        // Get the current color at the starting pixel
+        // 시작 픽셀에서 현재 색상 가져오기
         Color targetColor = drawable_texture.GetPixel(x, y);
 
-        // If the target color is the same as the fill color, return (nothing to fill)
+        // 대상 색상이 채울 색상과 같으면 반환
         if (targetColor == fillcolor)
             return;
 
-        // Perform flood fill
         Queue<Vector2> pixels = new Queue<Vector2>();
         pixels.Enqueue(new Vector2(x, y));
 
@@ -216,7 +188,6 @@ public class Drawable : MonoBehaviour
             {
                 drawable_texture.SetPixel(px, py, fillcolor);
 
-                // Enqueue neighboring pixels
                 pixels.Enqueue(new Vector2(px - 1, py));
                 pixels.Enqueue(new Vector2(px + 1, py));
                 pixels.Enqueue(new Vector2(px, py - 1));
@@ -229,24 +200,25 @@ public class Drawable : MonoBehaviour
 
     public Vector2 WorldToPixelCoordinates(Vector2 world_position)
     {
-        // Change coordinates to local coordinates of this image
+        // 좌표를 이 이미지의 로컬 좌표로 변경
         Vector3 local_pos = transform.InverseTransformPoint(world_position);
 
-        // Change these to coordinates of pixels
+        // 픽셀 좌표로 변경
         float pixelWidth = drawable_sprite.rect.width;
         float pixelHeight = drawable_sprite.rect.height;
         float unitsToPixels = pixelWidth / drawable_sprite.bounds.size.x * transform.localScale.x;
 
-        // Need to center our coordinates
+        // 센터 좌표 계산
         float centered_x = local_pos.x * unitsToPixels + pixelWidth / 2;
         float centered_y = local_pos.y * unitsToPixels + pixelHeight / 2;
 
-        // Round current mouse position to nearest pixel
+        // 현재 마우스 위치를 가장 가까운 픽셀로 반올림
         Vector2 pixel_pos = new Vector2(Mathf.RoundToInt(centered_x), Mathf.RoundToInt(centered_y));
 
         return pixel_pos;
     }
 
+    //캔버스 초기화
     public void ResetCanvas()
     {
         drawable_texture.SetPixels(clean_colors_array);
