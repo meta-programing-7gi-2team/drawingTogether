@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ScreenShot : MonoBehaviour
 {
     // 스크린샷을 저장하는 메서드
-    public void CaptureScreenshot()
+    public void OnCapture()
     {
         // 현재 날짜와 시간을 사용하여 파일 이름 생성
         string timestamp = System.DateTime.Now.ToString("yyyyMMdd_HHmmss");
