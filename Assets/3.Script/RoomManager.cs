@@ -13,7 +13,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     [SerializeField] private Button[] Room_Btu;
     [SerializeField] private Text Nickname;
     [SerializeField] private Image UserImage;
-    private RoomOptions RoomSetting = new RoomOptions { MaxPlayers = 8, IsVisible = true, IsOpen = true, EmptyRoomTtl = 0 };
+    [SerializeField] private int Player_Count = 8;
 
     public override void OnJoinedLobby() // 로비 접속 완료되면 반환되는 메소드
     {
@@ -23,9 +23,18 @@ public class RoomManager : MonoBehaviourPunCallbacks
     }
 
     #region 방관련
+
+    public void Player_Count_T(int Player)
+    {
+        Player_Count = Player;
+    }
+
     public void CreateRoom()
     {
+        RoomOptions RoomSetting = new RoomOptions { MaxPlayers = Player_Count, IsVisible = true, IsOpen = true, EmptyRoomTtl = 0 };
+
         PhotonNetwork.CreateRoom(Roominput.text == "" ? "Room" + Random.Range(0, 100) : Roominput.text, RoomSetting);
+
     }
 
     public override void OnCreatedRoom() // 방생성에 성공하면 나오는 메소드
