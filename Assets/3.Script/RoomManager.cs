@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
@@ -8,7 +9,7 @@ using Photon.Realtime;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private InputField Roominput;
+    [SerializeField] private TMP_InputField Roominput;
     [SerializeField] private Button[] Room_Btu;
     [SerializeField] private Text Nickname;
     [SerializeField] private Image UserImage;
@@ -16,7 +17,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby() // 로비 접속 완료되면 반환되는 메소드
     {
-        Sprite playerSprite = Resources.Load<Sprite>($"Player_Image/{NetworkManager.instance.Image_F}");
+        Sprite playerSprite = Resources.Load<Sprite>($"Player_Image/{UserInfo_Manager.instance.info.User_Image}");
         UserImage.sprite = playerSprite;
         Nickname.text = ($"{PhotonNetwork.NickName} 님");
     }

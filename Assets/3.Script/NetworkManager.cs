@@ -9,7 +9,6 @@ using Photon.Realtime;
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     public static NetworkManager instance = null;
-    public string Image_F; // DB연결해서DB에있는 이미지 파일가져와야함
 
     private void Awake()
     {
@@ -30,7 +29,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void Connect()
     {
         PhotonNetwork.ConnectUsingSettings(); // 서버 연결시작
-        Image_F = UserInfo_Manager.instance.info.User_Image;
         PhotonNetwork.NickName = UserInfo_Manager.instance.info.User_Name;
     }
 
