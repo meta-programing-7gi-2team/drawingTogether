@@ -12,7 +12,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     private RoomOptions RoomSetting = new RoomOptions { MaxPlayers = 8, IsVisible = true, IsOpen = true, EmptyRoomTtl = 0 };
 
 
-    #region 방생성 관련
+    #region 방관련
     public void CreateRoom()
     {
         PhotonNetwork.CreateRoom(Roominput.text == "" ? "Room" + Random.Range(0, 100) : Roominput.text, RoomSetting);
@@ -43,6 +43,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
             RoomInfo room = roomList[i];
             Button roomButton = Room_Btu[i];
 
+            if (room.RemovedFromList || room.PlayerCount == 0)
+            {
+                continue;
+            }
 
             // 버튼의 텍스트 설정 (Button 아래에 있는 Text 컴포넌트를 찾아서 설정)
             Text RoomText = roomButton.transform.GetChild(0).GetComponent<Text>();
