@@ -454,6 +454,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 174949268}
   m_CullTransparentMesh: 1
+--- !u!1 &185680648
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 185680649}
+  - component: {fileID: 185680650}
+  m_Layer: 0
+  m_Name: RoomManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &185680649
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185680648}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 631.0865, y: 622.755, z: -191.77068}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &185680650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185680648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5fa3e5cb8fb75744a30801e25b9916f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Roominput: {fileID: 50159318}
+  Room_Btu:
+  - {fileID: 1326274442}
+  - {fileID: 174949270}
+  - {fileID: 216543681}
+  - {fileID: 1256015954}
+  - {fileID: 315035541}
+  - {fileID: 639420467}
 --- !u!1 &216543679
 GameObject:
   m_ObjectHideFlags: 0
@@ -944,6 +995,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 580931835}
+  - component: {fileID: 580931837}
   - component: {fileID: 580931836}
   m_Layer: 0
   m_Name: NetworkManager
@@ -978,15 +1030,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeb4057303e43fb44aa630ce8c8834ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testname: "\uC774\uBBFC\uD64D"
-  Roominput: {fileID: 50159318}
-  Room_Btu:
-  - {fileID: 1326274442}
-  - {fileID: 174949270}
-  - {fileID: 216543681}
-  - {fileID: 1256015954}
-  - {fileID: 315035541}
-  - {fileID: 639420467}
+--- !u!114 &580931837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 580931834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &590179863
 GameObject:
   m_ObjectHideFlags: 0
