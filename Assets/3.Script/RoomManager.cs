@@ -15,7 +15,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
     [SerializeField] private Text Nickname;
     [SerializeField] private Image UserImage;
     [SerializeField] private int Player_Count = 8;
-    private Vector3 spawnPosition = new Vector3(0, 0, 0);
 
     public override void OnJoinedLobby() // 로비 접속 완료되면 반환되는 메소드
     {
@@ -87,12 +86,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
     }
     #endregion
 
-#if UNITY_EDITOR
-    [ExecuteInEditMode]
     public override void OnJoinedRoom()
     {
         Debug.Log("Successfully joined room: " + PhotonNetwork.CurrentRoom.Name);
-        PhotonNetwork.Instantiate("Player", spawnPosition, Quaternion.identity);
+        GameObject myObject = PhotonNetwork.Instantiate("PhotonN", Vector3.zero, Quaternion.identity);
+        PhotonView photonView = myObject.GetComponent<PhotonView>();
+        Debug.Log("Instantiated object with Photon View ID: " + photonView.ViewID);
     }
-    #endif
+
 }
