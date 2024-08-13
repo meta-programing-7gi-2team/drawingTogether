@@ -12,7 +12,7 @@ public class User_info
     public string User_ID { get; private set; }
     public string User_Password { get; private set; }
     public string User_Name { get; private set; }
-    public string User_Image { get; private set; }
+    public string User_Image { get; set; }
 
     public User_info(string id, string password, string name, string Image)
     {
