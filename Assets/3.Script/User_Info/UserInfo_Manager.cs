@@ -94,10 +94,18 @@ public class UserInfo_Manager : MonoBehaviour
         return true;
     }
 
+    private static Dictionary<string, bool> loggedInUsers = new Dictionary<string, bool>();
+
     public bool Login(string id, string password)
     {
         try
         {
+            if (loggedInUsers.ContainsKey(id) && loggedInUsers[id])
+            {
+                Debug.Log("이미 로그인 중인 계정입니다.");
+                return false;
+            }
+
             if (!connection_Check(connection))
             {
                 return false;
@@ -118,6 +126,8 @@ public class UserInfo_Manager : MonoBehaviour
                     {
                         info = new User_info(Id, Pass, Name, lmage);
 
+                        loggedInUsers[id] = true;
+
                         if (!reader.IsClosed) reader.Close();
                         return true;
                     }
@@ -135,6 +145,15 @@ public class UserInfo_Manager : MonoBehaviour
             Debug.Log(e.Message);
             if (!reader.IsClosed) reader.Close();
             return false;
+        }
+    }
+
+    public void Logout(string id)
+    {
+        if (loggedInUsers.ContainsKey(id))
+        {
+            loggedInUsers[id] = false;
+            Debug.Log($"{id} 로그아웃");
         }
     }
 
