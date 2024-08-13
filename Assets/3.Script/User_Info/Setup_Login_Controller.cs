@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using Photon.Pun;
 
-public class Setup_Login_Controller : MonoBehaviour
+public class Setup_Login_Controller : MonoBehaviourPunCallbacks
 {
     [Header("Login")]
     public TMP_InputField ID_input;
     public TMP_InputField Password_input;
     [SerializeField] private TextMeshProUGUI Log;
     [SerializeField] private GameObject Login_UI;
+    [SerializeField] private GameObject Loding_UI;
+    [SerializeField] private GameObject Room_Panel;
 
     [Header("SetUp")]
     public TMP_InputField NickName_input;
@@ -30,7 +33,7 @@ public class Setup_Login_Controller : MonoBehaviour
         if (UserInfo_Manager.instance.Login(ID_input.text, Password_input.text))
         {
             User_info info = UserInfo_Manager.instance.info;
-            Login_UI.SetActive(false);
+            Loding_UI.SetActive(true);
             NetworkManager.instance.Connect();
             Debug.Log(info.User_ID + " | " + info.User_Password + "로그인 성공!");
         }
@@ -64,5 +67,11 @@ public class Setup_Login_Controller : MonoBehaviour
         {
             S_Log.text = "회원가입에 실패하셨습니다.";
         }
+    }
+
+    public override void OnJoinedLobby()
+    {
+        Loding_UI.SetActive(false);
+        Room_Panel.SetActive(true);
     }
 }

@@ -34,11 +34,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.NickName = UserInfo_Manager.instance.info.User_Name;
     }
 
-    public override void OnConnected()
-    {
-        SceneManager.LoadScene("NetWork");
-    }
-
     public override void OnConnectedToMaster() // 서버 연결 완료되면 반환되는 메소드
     {
         PhotonNetwork.JoinLobby(); // 로비 접속 시작
