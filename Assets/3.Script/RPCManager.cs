@@ -70,12 +70,14 @@ public class RPCManager : MonoBehaviourPunCallbacks
     {
         Debug.Log(otherPlayer);
         photonView.RPC("LeftRoom", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber);
+        PhotonNetwork.Destroy(photonView);
     }
 
     public override void OnLeftRoom()
     {
         Debug.Log("ddd");
         photonView.RPC("LeftRoom", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber);
+        PhotonNetwork.Destroy(photonView);
     }
 
     [PunRPC]
@@ -90,7 +92,6 @@ public class RPCManager : MonoBehaviourPunCallbacks
         player_m.color = color;
 
         player_t.text = string.Empty;
-        PhotonNetwork.Destroy(photonView);
     }
 
     [PunRPC]
