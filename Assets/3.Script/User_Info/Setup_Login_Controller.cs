@@ -31,13 +31,13 @@ public class Setup_Login_Controller : MonoBehaviourPunCallbacks
             return;
         }
 
-        if (UserInfo_Manager.loggedInUsers.ContainsKey(ID_input.text) && UserInfo_Manager.loggedInUsers[ID_input.text])
-        {
-            Log.text = "이미 로그인 중인 계정입니다.";
-            return;
-        }
-
-        UserInfo_Manager.loggedInUsers[ID_input.text] = true;
+       //if (UserInfo_Manager.loggedInUsers.ContainsKey(ID_input.text) && UserInfo_Manager.loggedInUsers[ID_input.text])
+       //{
+       //    Log.text = "이미 로그인 중인 계정입니다.";
+       //    return;
+       //}
+       //
+       //UserInfo_Manager.loggedInUsers[ID_input.text] = true;
 
         if (UserInfo_Manager.instance.Login(ID_input.text, Password_input.text))
         {
