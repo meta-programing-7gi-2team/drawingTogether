@@ -100,11 +100,11 @@ public class UserInfo_Manager : MonoBehaviour
     {
         try
         {
-           // if (loggedInUsers.ContainsKey(id) && loggedInUsers[id])
-           // {
-           //     Debug.Log("이미 로그인 중인 계정입니다.");
-           //     return false;
-           // }
+           if (loggedInUsers.ContainsKey(id) && loggedInUsers[id])
+           {
+               Debug.Log("이미 로그인 중인 계정입니다.");
+               return false;
+           }
 
             if (!connection_Check(connection))
             {
@@ -148,14 +148,14 @@ public class UserInfo_Manager : MonoBehaviour
         }
     }
 
-    //public void Logout(string id)
-    //{
-    //    if (loggedInUsers.ContainsKey(id))
-    //    {
-    //        loggedInUsers[id] = false;
-    //        Debug.Log($"{id} 로그아웃");
-    //    }
-    //}
+    public void Logout(string id)
+    {
+        if (loggedInUsers.ContainsKey(id))
+        {
+            loggedInUsers[id] = false;
+            Debug.Log($"{id} 로그아웃");
+        }
+    }
 
     public bool SetUp(string id, string password, string name)
     {
