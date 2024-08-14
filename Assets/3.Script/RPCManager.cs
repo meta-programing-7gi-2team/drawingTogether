@@ -19,6 +19,8 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
         userImage = NetworkManager.instance.GetPlayerImage(player);
 
+        photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, userImage);
+
         int RoomMax = PhotonNetwork.CurrentRoom.MaxPlayers;
 
         for (int i = 0; i < RoomMax; i++)
