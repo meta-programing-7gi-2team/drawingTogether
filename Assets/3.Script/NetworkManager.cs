@@ -31,40 +31,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
     #region 서버 접속을 위한용도
-
-    public void Connect()
-    {
-        PhotonNetwork.ConnectUsingSettings(); // 서버 연결시작
-        PhotonNetwork.NickName = UserInfo_Manager.instance.info.User_Name;
-    }
-
-    public override void OnConnectedToMaster() // 서버 연결 완료되면 콜되는 메소드
-    {
-        PhotonNetwork.JoinLobby(); // 로비 접속 시작
-    }
-
-    public override void OnCreatedRoom() // 방생성에 성공하면 나오는 메소드
-    {
-        Debug.Log("방생성 완료");
-    }
-
-    public void JoinRoom()
-    {
-        GameObject clickedButton = EventSystem.current.currentSelectedGameObject;
-        roomName = clickedButton.transform.GetChild(0).GetComponent<Text>().text;
-        SceneManager.sceneLoaded += OnSceneLoaded;
-        SceneManager.LoadScene("IngameUI");
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        SetPlayerImage(UserInfo_Manager.instance.info.User_Image);
-
-        PhotonNetwork.JoinRoom(roomName);
-
-        roomName = string.Empty;
-    }
-
     public override void OnJoinedRoom()
     {
         Debug.Log("Successfully joined room: " + PhotonNetwork.CurrentRoom.Name);

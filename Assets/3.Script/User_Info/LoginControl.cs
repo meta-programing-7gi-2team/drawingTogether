@@ -41,7 +41,7 @@ public class LoginControl : MonoBehaviourPunCallbacks
             User_info info = UserInfo_Manager.instance.info;
             Loding_UI.SetActive(true);
             Log.text = string.Empty;
-            NetworkManager.instance.Connect();
+            PhotonNetwork.ConnectUsingSettings();
             Debug.Log(info.User_ID + " | " + info.User_Password + "로그인 성공!");
         }
         else
