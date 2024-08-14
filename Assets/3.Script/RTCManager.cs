@@ -5,12 +5,16 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class RTCManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject[] seatObjects;
-   
+
+    private void Start()
+    {
+        seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
+    }
+
     private string GetPlayerImage(Player player)
     {
         if (player.CustomProperties.ContainsKey("UserImage"))
@@ -26,10 +30,6 @@ public class RTCManager : MonoBehaviourPunCallbacks
 
         string Player_I = GetPlayerImage(newPlayer);
 
-        if (seatObjects == null || seatObjects.Length == 0)
-        {
-            seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
-        }
 
         // 새로 들어온 플레이어에게 기존 플레이어들의 정보를 전송
         foreach (Player player in PhotonNetwork.PlayerList)
@@ -57,6 +57,9 @@ public class RTCManager : MonoBehaviourPunCallbacks
             Text playerNameText = seatObject.transform.GetChild(0).GetComponent<Text>();
             Image playerImage = seatObject.transform.GetChild(1).GetComponent<Image>();
             Sprite playerSprite = Resources.Load<Sprite>($"Player_Image/{image}");
+            Color color = playerImage.color;
+            color.a = 1;
+            playerImage.color = color;
 
             playerNameText.text = NickName;
             playerImage.sprite = playerSprite;
