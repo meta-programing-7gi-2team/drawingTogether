@@ -28,14 +28,15 @@ public class Drawable : MonoBehaviour
     public Color Reset_color = new Color(0, 0, 0, 0);  // 기본 리셋은 투명
 
     public static Drawable drawable;
-    Sprite drawable_sprite;
-    Texture2D drawable_texture;
+    private Sprite drawable_sprite;
+    private Texture2D drawable_texture;
 
-    Vector2 previous_drag_position;
-    Color[] clean_colors_array;
-    Color32[] cur_colors;
-    bool mouse_was_previously_held_down = false;
-    bool no_drawing_on_current_drag = false;
+    private Vector2 previous_drag_position;
+    private Color[] clean_colors_array;
+    private Color32[] cur_colors;
+    private bool mouse_was_previously_held_down = false;
+    private bool no_drawing_on_current_drag = false;
+    private bool isFilling = false;
 
     // 기본 브러쉬
     public void PenBrush(Vector2 world_point)
@@ -161,6 +162,9 @@ public class Drawable : MonoBehaviour
 
     public void FloodFill(Vector2 startPosition, Color fillcolor)
     {
+        if (isFilling)
+            return;
+
         // 시작 위치를 픽셀 좌표로 변환
         Vector2 pixelPos = WorldToPixelCoordinates(startPosition);
         int x = (int)pixelPos.x;
@@ -176,6 +180,7 @@ public class Drawable : MonoBehaviour
         Queue<Vector2> pixels = new Queue<Vector2>();
         pixels.Enqueue(new Vector2(x, y));
 
+        isFilling = true;
         while (pixels.Count > 0)
         {
             Vector2 currentPixel = pixels.Dequeue();
@@ -197,8 +202,8 @@ public class Drawable : MonoBehaviour
                 pixels.Enqueue(new Vector2(px, py + 1));
             }
         }
-
         drawable_texture.Apply();
+        isFilling = false;
     }
 
     public Vector2 WorldToPixelCoordinates(Vector2 world_position)
