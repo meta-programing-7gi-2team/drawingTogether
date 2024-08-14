@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -53,6 +54,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         SceneManager.LoadScene("IngameUI");
     }
 
+    private void SetPlayerImage(string userImage)
+    {
+        Hashtable customProperties = new Hashtable();
+        customProperties["UserImage"] = userImage; 
+        PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
+    }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Room_Count = PlayerPrefs.GetInt("Player_Count");
@@ -69,6 +77,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             seatObjects[i].SetActive(false);
         }
 
+        SetPlayerImage(UserInfo_Manager.instance.info.User_Image);
         PhotonNetwork.Instantiate("PhotonN", Vector3.zero, Quaternion.identity);
     }
     #endregion

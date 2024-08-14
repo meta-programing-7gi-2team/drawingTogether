@@ -29,6 +29,7 @@ public class UserInfo_Manager : MonoBehaviour
 
     public MySqlConnection connection;
     public MySqlDataReader reader;
+    public string U_Image;
 
     [SerializeField] private string DB_Path = string.Empty;
 
@@ -222,4 +223,6 @@ public class UserInfo_Manager : MonoBehaviour
             return false;
         }
     }
+
+    
 }
