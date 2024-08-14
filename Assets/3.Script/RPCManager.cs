@@ -14,6 +14,14 @@ public class RPCManager : MonoBehaviourPunCallbacks
     {
         seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
 
+        for (int i = 0; i < seatObjects.Length; i++)
+        {
+            if(seatObjects[i].transform.childCount.Equals(4))
+            {
+                transform.SetParent(seatObjects[i].transform);
+                break;
+            }
+        }
 
         Player player = PhotonNetwork.LocalPlayer;
 
@@ -32,6 +40,7 @@ public class RPCManager : MonoBehaviourPunCallbacks
         {
             seatObjects[i].SetActive(false);
         }
+
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -56,7 +65,12 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        photonView.RPC("LeftRoom", RpcTarget.All, otherPlayer.ActorNumber);
+        Debug.Log(otherPlayer);
+    }
+
+    public override void OnLeftRoom()
+    {
+        Debug.Log("dd");
     }
 
     [PunRPC]
