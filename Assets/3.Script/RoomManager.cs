@@ -65,8 +65,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        //string t = SceneManager.GetActiveScene().name;
-
         NetworkManager.instance.SetPlayerImage(UserInfo_Manager.instance.info.User_Image);
 
         PhotonNetwork.JoinRoom(RoomName);
@@ -74,11 +72,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
         RoomName = string.Empty;
 
         SceneManager.sceneLoaded -= OnSceneLoaded;
-
-        //if (t.Equals("IngameUI"))
-        //{
-            
-        //}
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList) // 방이 새로 생성되었다면 호출되는 메소드
