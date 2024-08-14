@@ -16,6 +16,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     [SerializeField] private Image UserImage;
     [SerializeField] private string RoomName;
     [SerializeField] private int Player_Count = 0;
+    List<RoomInfo> myList = new List<RoomInfo>();
 
     public override void OnJoinedLobby() // 로비 접속 완료되면 반환되는 메소드
     {
@@ -76,8 +77,20 @@ public class RoomManager : MonoBehaviourPunCallbacks
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    public override void OnRoomListUpdate(List<RoomInfo> roomList) // 방이 새로 생성되었다면 호출되는 메소드
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
+        int roomCount = roomList.Count;
+
+        for (int i = 0; i < roomCount; i++)
+        {
+            if (!roomList[i].RemovedFromList)
+            {
+                if (!myList.Contains(roomList[i])) myList.Add(roomList[i]);
+                else myList[myList.IndexOf(roomList[i])] = roomList[i];
+            }
+            else if (myList.IndexOf(roomList[i]) != -1) myList.RemoveAt(myList.IndexOf(roomList[i]));
+        }
+
         for (int i = 0; i < Room_Btu.Length; i++)
         {
             Button roomButton = Room_Btu[i];
@@ -91,16 +104,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
             roomButton.interactable = false;
         }
 
-        for (int i = 0; i < roomList.Count && i < Room_Btu.Length; i++)
+        for (int i = 0; i < myList.Count; i++)
         {
-            RoomInfo room = roomList[i];
-            Button roomButton = Room_Btu[i];
-
-            if (room.RemovedFromList || room.PlayerCount == 0)
-            {
-                continue;
-            }
-
+            RoomInfo room = myList[i];
+            Button roomButton = Room_Btu[i]
+                ;
             roomButton.interactable = true;
 
             Text RoomText = roomButton.transform.GetChild(0).GetComponent<Text>();
@@ -109,5 +117,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
             PlayerText.text = $"({room.PlayerCount}/{room.MaxPlayers})";
         }
     }
+
     #endregion
 }
