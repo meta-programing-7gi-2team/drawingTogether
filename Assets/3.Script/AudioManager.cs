@@ -13,9 +13,13 @@ public class AudioManager : MonoBehaviour
     [Header("Audio Clip")]
     public AudioClip Lobby_Background;
     public AudioClip InGame_Background;
+    public AudioClip StartGame_SFX;
     public AudioClip Timer_SFX;
     public AudioClip BtnClick_SFX;
-    //public AudioClip Background;
+    public AudioClip Clear_SFX;
+    public AudioClip CorrectAnswer_SFX;
+    public AudioClip ResultWin_SFX;
+    public AudioClip ResultLose_SFX;
 
     private void Awake()
     {
