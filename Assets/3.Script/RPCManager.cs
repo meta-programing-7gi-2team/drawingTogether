@@ -14,6 +14,13 @@ public class RPCManager : MonoBehaviourPunCallbacks
     {
         seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
 
+
+        Player player = PhotonNetwork.LocalPlayer;
+
+        string userImage = NetworkManager.instance.GetPlayerImage(player);
+
+        photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, userImage);
+
         for (int i = 0; i < seatObjects.Length; i++)
         {
             if(seatObjects[i].transform.childCount.Equals(4))
@@ -22,12 +29,6 @@ public class RPCManager : MonoBehaviourPunCallbacks
                 break;
             }
         }
-
-        Player player = PhotonNetwork.LocalPlayer;
-
-        string userImage = NetworkManager.instance.GetPlayerImage(player);
-
-        photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, userImage);
         
         int RoomMax = PhotonNetwork.CurrentRoom.MaxPlayers;
 
