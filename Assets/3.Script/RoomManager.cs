@@ -79,13 +79,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
         GameObject clickedButton = EventSystem.current.currentSelectedGameObject;
         string roomName = clickedButton.transform.GetChild(0).GetComponent<Text>().text;
         PhotonNetwork.JoinRoom(roomName);
-        SceneManager.LoadScene("IngameUI");
-    }
-
-    public override void OnJoinedRoom()
-    {
-        Debug.Log("Successfully joined room: " + PhotonNetwork.CurrentRoom.Name);
-        GameObject test = PhotonNetwork.Instantiate("PhotonN", Vector3.zero, Quaternion.identity);
     }
     #endregion
 }

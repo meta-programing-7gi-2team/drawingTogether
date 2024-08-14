@@ -44,6 +44,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnCreatedRoom() // 방생성에 성공하면 나오는 메소드
     {
         Debug.Log("방생성 완료");
+    }
+
+    public override void OnJoinedRoom()
+    {
+        Debug.Log("Successfully joined room: " + PhotonNetwork.CurrentRoom.Name);
         SceneManager.sceneLoaded += OnSceneLoaded;
         SceneManager.LoadScene("IngameUI");
     }
@@ -63,6 +68,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             seatObjects[i].SetActive(false);
         }
+
+        PhotonNetwork.Instantiate("PhotonN", Vector3.zero, Quaternion.identity);
     }
     #endregion
 
