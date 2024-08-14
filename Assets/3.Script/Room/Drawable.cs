@@ -36,7 +36,6 @@ public class Drawable : MonoBehaviour
     private Color32[] cur_colors;
     private bool mouse_was_previously_held_down = false;
     private bool no_drawing_on_current_drag = false;
-    private bool isFilling = false;
 
     // 기본 브러쉬
     public void PenBrush(Vector2 world_point)
@@ -159,28 +158,22 @@ public class Drawable : MonoBehaviour
         drawable_texture.SetPixels32(cur_colors);
         drawable_texture.Apply();
     }
-
     public void FloodFill(Vector2 startPosition, Color fillcolor)
     {
-        if (isFilling)
-            return;
-
-        // 시작 위치를 픽셀 좌표로 변환
         Vector2 pixelPos = WorldToPixelCoordinates(startPosition);
         int x = (int)pixelPos.x;
         int y = (int)pixelPos.y;
 
-        // 시작 픽셀에서 현재 색상 가져오기
         Color targetColor = drawable_texture.GetPixel(x, y);
 
-        // 대상 색상이 채울 색상과 같으면 반환
         if (targetColor == fillcolor)
             return;
 
         Queue<Vector2> pixels = new Queue<Vector2>();
+        HashSet<Vector2> visited = new HashSet<Vector2>();
         pixels.Enqueue(new Vector2(x, y));
+        visited.Add(new Vector2(x, y));
 
-        isFilling = true;
         while (pixels.Count > 0)
         {
             Vector2 currentPixel = pixels.Dequeue();
@@ -196,14 +189,24 @@ public class Drawable : MonoBehaviour
             {
                 drawable_texture.SetPixel(px, py, fillcolor);
 
-                pixels.Enqueue(new Vector2(px - 1, py));
-                pixels.Enqueue(new Vector2(px + 1, py));
-                pixels.Enqueue(new Vector2(px, py - 1));
-                pixels.Enqueue(new Vector2(px, py + 1));
+                Vector2[] neighbors = {
+                new Vector2(px - 1, py),
+                new Vector2(px + 1, py),
+                new Vector2(px, py - 1),
+                new Vector2(px, py + 1)
+            };
+
+                foreach (var neighbor in neighbors) //방문한 픽셀 삽입 방지 
+                {
+                    if (!visited.Contains(neighbor))
+                    {
+                        pixels.Enqueue(neighbor);
+                        visited.Add(neighbor);
+                    }
+                }
             }
         }
         drawable_texture.Apply();
-        isFilling = false;
     }
 
     public Vector2 WorldToPixelCoordinates(Vector2 world_position)
