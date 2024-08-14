@@ -170,8 +170,6 @@ public class Drawable : MonoBehaviour
         int x = (int)pixelPos.x;
         int y = (int)pixelPos.y;
 
-        int pixelCount = 0;
-
         // 시작 픽셀에서 현재 색상 가져오기
         Color targetColor = drawable_texture.GetPixel(x, y);
 
