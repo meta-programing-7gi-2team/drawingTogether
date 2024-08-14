@@ -89,9 +89,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("Successfully joined room: " + PhotonNetwork.CurrentRoom.Name);
-        GameObject myObject = PhotonNetwork.Instantiate("PhotonN", Vector3.zero, Quaternion.identity);
-        PhotonView photonView = myObject.GetComponent<PhotonView>();
-        Debug.Log("Instantiated object with Photon View ID: " + photonView.ViewID);
+        PhotonNetwork.Instantiate("PhotonN", Vector3.zero, Quaternion.identity);
     }
 
 }
