@@ -21,15 +21,6 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
         photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, userImage);
 
-        for (int i = 0; i < seatObjects.Length; i++)
-        {
-            if(seatObjects[i].transform.childCount.Equals(4))
-            {
-                transform.SetParent(seatObjects[i].transform);
-                break;
-            }
-        }
-        
         int RoomMax = PhotonNetwork.CurrentRoom.MaxPlayers;
 
         for (int i = 0; i < RoomMax; i++)
@@ -58,6 +49,15 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
             string existingPlayerImage = NetworkManager.instance.GetPlayerImage(player);
             photonView.RPC("Room", newPlayer, player.ActorNumber, player.NickName, existingPlayerImage);
+        }
+
+        for (int i = 0; i < seatObjects.Length; i++)
+        {
+            if (seatObjects[i].transform.childCount.Equals(4))
+            {
+                transform.SetParent(seatObjects[i].transform);
+                break;
+            }
         }
 
         // 모든 클라이언트에게 새 플레이어 정보를 전송
