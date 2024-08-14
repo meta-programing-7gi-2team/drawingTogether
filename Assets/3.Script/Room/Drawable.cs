@@ -145,7 +145,7 @@ public class Drawable : MonoBehaviour
         int array_pos = y * (int)drawable_sprite.rect.width + x;
 
         // index 위치 체크
-        if (array_pos > cur_colors.Length || array_pos < 0)
+        if (array_pos > cur_colors.Length || x < 1)
             return;
 
         cur_colors[array_pos] = color;
