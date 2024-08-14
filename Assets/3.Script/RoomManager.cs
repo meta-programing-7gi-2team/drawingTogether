@@ -52,6 +52,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
         RoomOptions RoomSetting = new RoomOptions { MaxPlayers = Player_Count, IsVisible = true, IsOpen = true, EmptyRoomTtl = 0 };
 
         PhotonNetwork.CreateRoom(Roominput.text == "" ? "Room" + Random.Range(0, 100) : Roominput.text, RoomSetting);
+
+        SceneManager.sceneLoaded -= SceneLoaded;
     }
 
     public void JoinRoom()
