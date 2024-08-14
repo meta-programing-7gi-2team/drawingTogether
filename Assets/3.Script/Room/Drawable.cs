@@ -170,6 +170,8 @@ public class Drawable : MonoBehaviour
         int x = (int)pixelPos.x;
         int y = (int)pixelPos.y;
 
+        int pixelCount = 0;
+
         // 시작 픽셀에서 현재 색상 가져오기
         Color targetColor = drawable_texture.GetPixel(x, y);
 
@@ -177,10 +179,10 @@ public class Drawable : MonoBehaviour
         if (targetColor == fillcolor)
             return;
 
+        isFilling = true;
         Queue<Vector2> pixels = new Queue<Vector2>();
         pixels.Enqueue(new Vector2(x, y));
 
-        isFilling = true;
         while (pixels.Count > 0)
         {
             Vector2 currentPixel = pixels.Dequeue();
@@ -201,6 +203,9 @@ public class Drawable : MonoBehaviour
                 pixels.Enqueue(new Vector2(px, py - 1));
                 pixels.Enqueue(new Vector2(px, py + 1));
             }
+
+            if (pixels.Count > 10000) // 일정 범위 이상 들어가면 while문 stop
+                break;
         }
         drawable_texture.Apply();
         isFilling = false;
