@@ -24,12 +24,6 @@ public class DrawingSettings : MonoBehaviour
     }
 
     //Ææ ÄÃ·¯ ¼³Á¤
-    public void SetMarkerBlack()
-    {
-        Color c = Color.black;
-        SetMarkerColor(c);
-        Drawable.drawable.SetPenBrush();
-    }
     public void SetMarkerRed()
     {
         Color c = Color.red;
@@ -54,6 +48,12 @@ public class DrawingSettings : MonoBehaviour
         SetMarkerColor(c);
         Drawable.drawable.SetPenBrush();
     }
+    public void SetMarkerDarkGreen()
+    {
+        Color c = new Color(0, 160f/255f, 0);
+        SetMarkerColor(c);
+        Drawable.drawable.SetPenBrush();
+    }
     public void SetMarkerBlue()
     {
         Color c = new Color(0f, 0.702f, 0.906f);
@@ -69,6 +69,30 @@ public class DrawingSettings : MonoBehaviour
     public void SetMarkerMagenta()
     {
         Color c = Color.magenta;
+        SetMarkerColor(c);
+        Drawable.drawable.SetPenBrush();
+    }
+    public void SetMarkerViolet()
+    {
+        Color c = new Color(160f/255f, 0f, 1f);
+        SetMarkerColor(c);
+        Drawable.drawable.SetPenBrush();
+    }
+    public void SetMarkerBrown()
+    {
+        Color c = new Color(150f/255f, 80f/255f, 0);
+        SetMarkerColor(c);
+        Drawable.drawable.SetPenBrush();
+    }
+    public void SetMarkerBlack()
+    {
+        Color c = Color.black;
+        SetMarkerColor(c);
+        Drawable.drawable.SetPenBrush();
+    }
+    public void SetMarkerGray()
+    {
+        Color c = Color.gray;
         SetMarkerColor(c);
         Drawable.drawable.SetPenBrush();
     }
