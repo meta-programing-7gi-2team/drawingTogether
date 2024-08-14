@@ -239,6 +239,25 @@ public class UserInfo_Manager : MonoBehaviour
         }
     }
 
+    private void OnApplicationQuit()
+    {
+        if (info != null && info.LogIn)
+        {
+            Logout(info.User_ID);
+        }
+    }
+
+    private void OnApplicationPause(bool pauseStatus)
+    {
+        if (pauseStatus)
+        {
+            if (info != null && info.LogIn)
+            {
+                Logout(info.User_ID);
+            }
+        }
+    }
+
     public bool SetUp(string id, string password, string name)
     {
         try
