@@ -70,6 +70,19 @@ public class UserInfo_Manager : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        LoadAllUsersFromDatabase();
+
+        foreach (var user in allUsers)
+        {
+            if (!user.Value.IsLoggedIn)
+            {
+                Debug.Log($"로그인되지 않은 계정: {user.Key}");
+            }
+        }
+    }
+
     private string Server_Set(string path)
     {
         if (!File.Exists(path))
@@ -137,6 +150,14 @@ public class UserInfo_Manager : MonoBehaviour
         {
             allUsers[id].IsLoggedIn = true;
             info = allUsers[id];
+
+            Debug.Log($"{id}로그인 성공");
+
+            foreach (var user in allUsers)
+            {
+                Debug.Log($"ID: {user.Key}, 로그인 상태: {user.Value.IsLoggedIn}");
+            }
+
             return true;
         }
         else
