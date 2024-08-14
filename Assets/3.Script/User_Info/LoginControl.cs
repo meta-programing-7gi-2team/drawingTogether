@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using Photon.Pun;
 
-public class Setup_Login_Controller : MonoBehaviourPunCallbacks
+public class LoginControl : MonoBehaviourPunCallbacks
 {
     [Header("Login")]
     public TMP_InputField ID_input;
@@ -14,7 +14,7 @@ public class Setup_Login_Controller : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject Loding_UI;
     [SerializeField] private GameObject Room_Panel;
 
-    [Header("SetUp")]
+    [Header("Register")]
     public TMP_InputField NickName_input;
     public TMP_InputField id_input;
     public TMP_InputField password_input;
@@ -50,19 +50,18 @@ public class Setup_Login_Controller : MonoBehaviourPunCallbacks
         }
     }
 
-    public void SetActive_SetUpUI()
+    public void Open_RegisterUI()
     {
-        Login_UI.SetActive(false);
         Log.text = string.Empty;
         SetUp_UI.SetActive(true);
     }
 
-    public void SetUp_Btn()
+    public void Register_Btn()
     {
 
         if (NickName_input.text.Equals(string.Empty) || id_input.text.Equals(string.Empty) || password_input.text.Equals(string.Empty))
         {
-            S_Log.text = "닉네임, 아이디, 비밀번호를 입력하세요.";
+            S_Log.text = "빈칸을 모두 채워주세요";
             return;
         }
 
