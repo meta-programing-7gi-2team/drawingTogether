@@ -31,21 +31,19 @@ public class Setup_Login_Controller : MonoBehaviourPunCallbacks
             return;
         }
 
-       if (UserInfo_Manager.loggedInUsers.ContainsKey(ID_input.text) && UserInfo_Manager.loggedInUsers[ID_input.text])
-       {
-           Log.text = "이미 로그인 중인 계정입니다.";
-           return;
-       }
-       
-       //UserInfo_Manager.loggedInUsers[ID_input.text] = true;
+        bool loginResult = UserInfo_Manager.instance.Login(ID_input.text, Password_input.text);
 
-        if (UserInfo_Manager.instance.Login(ID_input.text, Password_input.text))
+        if (loginResult)
         {
             User_info info = UserInfo_Manager.instance.info;
             Loding_UI.SetActive(true);
             Log.text = string.Empty;
             NetworkManager.instance.Connect();
             Debug.Log(info.User_ID + " | " + info.User_Password + "로그인 성공!");
+        }
+        else if (UserInfo_Manager.instance.IsAlreadyLoggin(ID_input.text))
+        {
+            S_Log.text = "이미 로그인 중인 계정입니다.";
         }
         else
         {

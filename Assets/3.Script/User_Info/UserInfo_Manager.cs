@@ -148,6 +148,11 @@ public class UserInfo_Manager : MonoBehaviour
         }
     }
 
+    public bool IsAlreadyLoggin(string id)
+    {
+        return loggedInUsers.ContainsKey(id) && loggedInUsers[id];
+    }
+
     public void Logout(string id)
     {
         if (loggedInUsers.ContainsKey(id))
