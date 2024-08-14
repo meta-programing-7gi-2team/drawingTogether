@@ -13,6 +13,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public static NetworkManager instance = null;
     public string roomName;
     private int Room_Count;
+    [SerializeField] private GameObject[] seatObjects;
 
     private void Awake()
     {
