@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
+    #region 
+
     public static AudioManager instance = null;
 
     [SerializeField] private AudioMixer audiomixer;
@@ -63,4 +65,17 @@ public class AudioManager : MonoBehaviour
         SetBgmVolume();
         SetSfxVolume();
     }
+
+    #endregion
+
+    [Header("Audio Scurce")]
+    [SerializeField] private AudioSource BGMSource;
+    [SerializeField] private AudioSource SFXSource;
+
+    [Header("Audio Clip")]
+    public AudioClip Lobby_Background1;
+    public AudioClip InGame_Background;
+    public AudioClip Timer_SFX;
+    //public AudioClip Background;
+    //public AudioClip Background;
 }

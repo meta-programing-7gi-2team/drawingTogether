@@ -94,7 +94,7 @@ public class UserInfo_Manager : MonoBehaviour
         return true;
     }
 
-    private static Dictionary<string, bool> loggedInUsers = new Dictionary<string, bool>();
+    public static Dictionary<string, bool> loggedInUsers = new Dictionary<string, bool>();
 
     public bool Login(string id, string password)
     {
