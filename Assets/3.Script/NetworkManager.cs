@@ -13,7 +13,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public static NetworkManager instance = null;
     [SerializeField] private GameObject[] seatObjects;
     public string roomName;
-    public PhotonView targetPhotonView;
     private int Room_Count;
 
     private void Awake()
@@ -83,6 +82,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Hashtable customProperties = new Hashtable();
         customProperties["UserImage"] = userImage;
         PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
+    }
+
+    public string GetPlayerImage(Player player)
+    {
+        if (player.CustomProperties.ContainsKey("UserImage"))
+        {
+            return (string)player.CustomProperties["UserImage"];
+        }
+        return null;
     }
 
     public override void OnJoinedRoom()

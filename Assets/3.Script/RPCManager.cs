@@ -6,29 +6,26 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class RTCManager : MonoBehaviourPunCallbacks
+public class RPCManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject[] seatObjects;
 
     private void Start()
     {
         seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
-    }
 
-    private string GetPlayerImage(Player player)
-    {
-        if (player.CustomProperties.ContainsKey("UserImage"))
-        {
-            return (string)player.CustomProperties["UserImage"];
-        }
-        return null;
+        Player player = PhotonNetwork.LocalPlayer;
+
+        string userImage = NetworkManager.instance.GetPlayerImage(player);
+
+        photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, userImage);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Debug.Log("New player joined. ActorNumber: " + newPlayer.ActorNumber + ", NickName: " + newPlayer.NickName);
 
-        string Player_I = GetPlayerImage(newPlayer);
+        string Player_I = NetworkManager.instance.GetPlayerImage(newPlayer);
 
 
         // 새로 들어온 플레이어에게 기존 플레이어들의 정보를 전송
@@ -37,7 +34,7 @@ public class RTCManager : MonoBehaviourPunCallbacks
             if (player == newPlayer)
                 continue; // 새로 들어온 플레이어는 건너뜀
 
-            string existingPlayerImage = GetPlayerImage(player);
+            string existingPlayerImage = NetworkManager.instance.GetPlayerImage(player);
             photonView.RPC("Room", newPlayer, player.ActorNumber, player.NickName, existingPlayerImage);
         }
 
@@ -49,7 +46,7 @@ public class RTCManager : MonoBehaviourPunCallbacks
     public void Room(int ActorNumber, string NickName, string image)
     {
         int playerIndex = ActorNumber - 1;
-
+        
         if (playerIndex < seatObjects.Length)
         {
             GameObject seatObject = seatObjects[playerIndex];
