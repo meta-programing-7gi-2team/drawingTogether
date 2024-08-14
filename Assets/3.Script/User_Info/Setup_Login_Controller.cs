@@ -31,6 +31,14 @@ public class Setup_Login_Controller : MonoBehaviourPunCallbacks
             return;
         }
 
+        if (UserInfo_Manager.loggedInUsers.ContainsKey(ID_input.text) && UserInfo_Manager.loggedInUsers[ID_input.text])
+        {
+            Log.text = "이미 로그인 중인 계정입니다.";
+            return;
+        }
+
+        UserInfo_Manager.loggedInUsers[ID_input.text] = true;
+
         if (UserInfo_Manager.instance.Login(ID_input.text, Password_input.text))
         {
             User_info info = UserInfo_Manager.instance.info;
@@ -56,7 +64,7 @@ public class Setup_Login_Controller : MonoBehaviourPunCallbacks
     {
         if (NickName_input.text.Equals(string.Empty) || id_input.text.Equals(string.Empty) || password_input.text.Equals(string.Empty))
         {
-            S_Log.text = "닉네임과 아이디, 비밀번호를 입력하세요.";
+            S_Log.text = "닉네임, 아이디, 비밀번호를 입력하세요.";
             return;
         }
 
