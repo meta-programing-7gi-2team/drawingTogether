@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
@@ -9,6 +10,11 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class RTCManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject[] seatObjects;
+    public override void OnJoinedRoom()
+    {
+        Debug.Log("Successfully joined room: " + PhotonNetwork.CurrentRoom.Name);
+
+    }
 
     private string GetPlayerImage(Player player)
     {
@@ -30,12 +36,17 @@ public class RTCManager : MonoBehaviourPunCallbacks
             seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
         }
 
+        // 새로 들어온 플레이어에게 기존 플레이어들의 정보를 전송
         foreach (Player player in PhotonNetwork.PlayerList)
         {
+            if (player == newPlayer)
+                continue; // 새로 들어온 플레이어는 건너뜀
+
             string existingPlayerImage = GetPlayerImage(player);
             photonView.RPC("Room", newPlayer, player.ActorNumber, player.NickName, existingPlayerImage);
         }
 
+        // 모든 클라이언트에게 새 플레이어 정보를 전송
         photonView.RPC("Room", RpcTarget.All, newPlayer.ActorNumber, newPlayer.NickName, Player_I);
     }
 

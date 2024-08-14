@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -37,7 +36,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
         RoomOptions RoomSetting = new RoomOptions { MaxPlayers = Player_Count, IsVisible = true, IsOpen = true, EmptyRoomTtl = 0 };
 
         PhotonNetwork.CreateRoom(Roominput.text == "" ? "Room" + Random.Range(0, 100) : Roominput.text, RoomSetting);
-
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList) // 방이 새로 생성되었다면 호출되는 메소드
@@ -72,13 +70,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
             RoomText.text = room.Name;
             PlayerText.text = $"({room.PlayerCount}/{room.MaxPlayers})";
         }
-    }
-
-    public void JoinRoom()
-    {
-        GameObject clickedButton = EventSystem.current.currentSelectedGameObject;
-        string roomName = clickedButton.transform.GetChild(0).GetComponent<Text>().text;
-        PhotonNetwork.JoinRoom(roomName);
     }
     #endregion
 }

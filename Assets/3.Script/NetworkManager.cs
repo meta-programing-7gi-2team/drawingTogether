@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
@@ -12,6 +13,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public static NetworkManager instance = null;
     [SerializeField] private GameObject[] seatObjects;
     private int Room_Count;
+    public string roomName;
     public PhotonView targetPhotonView;
 
     private void Awake()
@@ -45,24 +47,21 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnCreatedRoom() // 방생성에 성공하면 나오는 메소드
     {
         Debug.Log("방생성 완료");
+        SceneManager.sceneLoaded += SceneLoaded;
+        SceneManager.LoadScene("IngameUI");
     }
 
-    public override void OnJoinedRoom()
+    public void JoinRoom()
     {
-        Debug.Log("Successfully joined room: " + PhotonNetwork.CurrentRoom.Name);
+        GameObject clickedButton = EventSystem.current.currentSelectedGameObject;
+        roomName = clickedButton.transform.GetChild(0).GetComponent<Text>().text;
         SceneManager.sceneLoaded += OnSceneLoaded;
         SceneManager.LoadScene("IngameUI");
     }
 
-    private void SetPlayerImage(string userImage)
+    private void SceneLoaded(Scene scene, LoadSceneMode mode) // 방생성전용
     {
-        Hashtable customProperties = new Hashtable();
-        customProperties["UserImage"] = userImage; 
-        PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
-    }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
         Room_Count = PlayerPrefs.GetInt("Player_Count");
 
         seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
@@ -78,7 +77,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         SetPlayerImage(UserInfo_Manager.instance.info.User_Image);
+
         PhotonNetwork.Instantiate("PhotonN", Vector3.zero, Quaternion.identity);
+
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        SetPlayerImage(UserInfo_Manager.instance.info.User_Image);
+
+        PhotonNetwork.Instantiate("PhotonN", Vector3.zero, Quaternion.identity);
+
+        PhotonNetwork.JoinRoom(roomName);
+    }
+
+    private void SetPlayerImage(string userImage)
+    {
+        Hashtable customProperties = new Hashtable();
+        customProperties["UserImage"] = userImage;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
     }
     #endregion
 
