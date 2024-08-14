@@ -13,6 +13,7 @@ public class User_info
     public string User_Password { get; private set; }
     public string User_Name { get; private set; }
     public string User_Image { get; set; }
+    public bool IsLoggedIn { get; set; }
 
     public User_info(string id, string password, string name, string Image)
     {
@@ -20,6 +21,7 @@ public class User_info
         User_Password = password;
         User_Name = name;
         User_Image = Image;
+        IsLoggedIn = false;
     }
 }
 
@@ -32,6 +34,8 @@ public class UserInfo_Manager : MonoBehaviour
     public string U_Image;
 
     [SerializeField] private string DB_Path = string.Empty;
+
+    public Dictionary<string, User_info> allUsers = new Dictionary<string, User_info>();
 
     public static UserInfo_Manager instance = null;
     private void Awake()
@@ -58,6 +62,7 @@ public class UserInfo_Manager : MonoBehaviour
             connection = new MySqlConnection(serverinfo);
             connection.Open();
             Debug.Log("DB Open connection compelete");
+            LoadAllUsersFromDatabase();
         }
         catch(Exception e)
         {
@@ -95,70 +100,61 @@ public class UserInfo_Manager : MonoBehaviour
         return true;
     }
 
-    public static Dictionary<string, bool> loggedInUsers = new Dictionary<string, bool>();
-
-    public bool Login(string id, string password)
+    void LoadAllUsersFromDatabase()
     {
         try
         {
-           if (loggedInUsers.ContainsKey(id) && loggedInUsers[id])
-           {
-               Debug.Log("이미 로그인 중인 계정입니다.");
-               return false;
-           }
-
-            if (!connection_Check(connection))
-            {
-                return false;
-            }
-            string SQL_Command = string.Format($@"SELECT User_ID, User_Password, User_Name, Image FROM user_info WHERE User_ID='{id}' AND User_Password='{password}';");
+            string SQL_Command = "SELECT User_ID, User_Password, User_Name, Image FROM user_info";
             MySqlCommand cmd = new MySqlCommand(SQL_Command, connection);
             reader = cmd.ExecuteReader();
-            if (reader.HasRows)
+            while (reader.Read())
             {
-                while (reader.Read())
-                {
-                    string Id = (reader.IsDBNull(0)) ? string.Empty : (string)reader["User_ID"];
-                    string Pass = (reader.IsDBNull(1)) ? string.Empty : (string)reader["User_Password"];
-                    string Name = (reader.IsDBNull(2)) ? string.Empty : (string)reader["User_Name"];
-                    string lmage = (reader.IsDBNull(3)) ? string.Empty : (string)reader["Image"];
+                string id = reader["User_ID"].ToString();
+                string password = reader["User_Password"].ToString();
+                string name = reader["User_Name"].ToString();
+                string image = reader["Image"].ToString();
 
-                    if (!Id.Equals(string.Empty) || !Pass.Equals(string.Empty))
-                    {
-                        info = new User_info(Id, Pass, Name, lmage);
-
-                        loggedInUsers[id] = true;
-
-                        if (!reader.IsClosed) reader.Close();
-                        return true;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
+                allUsers[id] = new User_info(id, password, name, image);
             }
             if (!reader.IsClosed) reader.Close();
-            return false;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Debug.Log(e.Message);
             if (!reader.IsClosed) reader.Close();
+        }
+    }
+
+    public bool Login(string id, string password)
+    {
+        if (allUsers.ContainsKey(id) && allUsers[id].IsLoggedIn)
+        {
+            Debug.Log("이미 로그인 중인 계정입니다.");
+            return false;
+        }
+
+        if (allUsers.ContainsKey(id) && allUsers[id].User_Password == password)
+        {
+            allUsers[id].IsLoggedIn = true;
+            info = allUsers[id];
+            return true;
+        }
+        else
+        {
             return false;
         }
     }
 
-    public bool IsAlreadyLoggin(string id)
+    public bool IsAlreadyLoggedIn(string id)
     {
-        return loggedInUsers.ContainsKey(id) && loggedInUsers[id];
+        return allUsers.ContainsKey(id) && allUsers[id].IsLoggedIn;
     }
 
     public void Logout(string id)
     {
-        if (loggedInUsers.ContainsKey(id))
+        if (allUsers.ContainsKey(id))
         {
-            loggedInUsers[id] = false;
+            allUsers[id].IsLoggedIn = false;
             Debug.Log($"{id} 로그아웃");
         }
     }
@@ -167,32 +163,22 @@ public class UserInfo_Manager : MonoBehaviour
     {
         try
         {
-            if (!connection_Check(connection))
+            if (allUsers.ContainsKey(id))
             {
+                Debug.Log("아이디가 중복되었습니다.");
                 return false;
             }
 
-            string Overlap_Check = string.Format($@"SELECT User_ID, User_Password, User_Name, Image FROM user_info WHERE User_ID='{id}';");
-            MySqlCommand chkcmd = new MySqlCommand(Overlap_Check, connection);
-            reader = chkcmd.ExecuteReader();
-            if (reader.HasRows)
-            {
-                if (!reader.IsClosed) reader.Close();
-                return false;
-            }
-            if (!reader.IsClosed) reader.Close();
-
-            string SQL_Command = string.Format($@"INSERT INTO user_info VALUES ('{id}', '{password}', '{name}', 'IM000');");
+            string SQL_Command = $"INSERT INTO user_info VALUES ('{id}', '{password}', '{name}', 'IM000');";
             MySqlCommand cmd = new MySqlCommand(SQL_Command, connection);
-            reader = cmd.ExecuteReader();
-            
-            if (!reader.IsClosed) reader.Close();
+            cmd.ExecuteNonQuery();
+
+            allUsers[id] = new User_info(id, password, name, "IM000");
             return true;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Debug.Log(e.Message);
-            if (!reader.IsClosed) reader.Close();
             return false;
         }
     }

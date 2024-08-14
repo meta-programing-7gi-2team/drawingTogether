@@ -41,7 +41,7 @@ public class Setup_Login_Controller : MonoBehaviourPunCallbacks
             NetworkManager.instance.Connect();
             Debug.Log(info.User_ID + " | " + info.User_Password + "로그인 성공!");
         }
-        else if (UserInfo_Manager.instance.IsAlreadyLoggin(ID_input.text))
+        else if (UserInfo_Manager.instance.IsAlreadyLoggedIn(ID_input.text))
         {
             S_Log.text = "이미 로그인 중인 계정입니다.";
         }
