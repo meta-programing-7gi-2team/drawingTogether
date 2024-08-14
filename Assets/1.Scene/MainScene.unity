@@ -205,7 +205,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &20852020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,9 +218,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41ef4f9a7254f17449b389d4bb3fc0a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audiomixer: {fileID: 0}
-  bgmSlider: {fileID: 0}
-  sfxSlider: {fileID: 0}
+  BGMSource: {fileID: 0}
+  SFXSource: {fileID: 0}
+  Lobby_Background: {fileID: 0}
+  InGame_Background: {fileID: 0}
+  Timer_SFX: {fileID: 0}
+  BtnClick_SFX: {fileID: 0}
 --- !u!4 &20852021
 Transform:
   m_ObjectHideFlags: 0
@@ -14423,6 +14426,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeb4057303e43fb44aa630ce8c8834ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  seatObjects: []
+  targetPhotonView: {fileID: 0}
 --- !u!4 &2004716793
 Transform:
   m_ObjectHideFlags: 0

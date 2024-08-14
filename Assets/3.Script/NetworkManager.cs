@@ -9,6 +9,9 @@ using Photon.Realtime;
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     public static NetworkManager instance = null;
+    [SerializeField] private GameObject[] seatObjects;
+    private int Room_Count;
+    public PhotonView targetPhotonView;
 
     private void Awake()
     {
@@ -16,6 +19,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+            PlayerPrefs.SetInt("Player_Count", 8);
         }
         else
         {
@@ -37,9 +41,28 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinLobby(); // 로비 접속 시작
     }
 
-    public override void OnJoinedLobby() // 로비접속에 성공하였을떄 콜되는 메소드
+    public override void OnCreatedRoom() // 방생성에 성공하면 나오는 메소드
     {
-        // 여기서 Photon View를 생성해줘야하는데 방법이 멀까 그 지 같 은 포 톤 새 키 야
+        Debug.Log("방생성 완료");
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.LoadScene("IngameUI");
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Room_Count = PlayerPrefs.GetInt("Player_Count");
+
+        seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
+
+        for (int i = 0; i < Room_Count; i++)
+        {
+            seatObjects[i].SetActive(true);
+        }
+
+        for (int i = Room_Count; i < seatObjects.Length; i++)
+        {
+            seatObjects[i].SetActive(false);
+        }
     }
     #endregion
 
