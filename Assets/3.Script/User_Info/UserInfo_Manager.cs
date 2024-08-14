@@ -13,7 +13,7 @@ public class User_info
     public string User_Password { get; private set; }
     public string User_Name { get; private set; }
     public string User_Image { get; set; }
-    public bool IsLoggedIn { get; set; }
+    public bool LogIn { get; set; }
 
     public User_info(string id, string password, string name, string Image)
     {
@@ -21,7 +21,16 @@ public class User_info
         User_Password = password;
         User_Name = name;
         User_Image = Image;
-        IsLoggedIn = false;
+        LogIn = false;
+    }
+
+    public User_info(string id, string password, string name, string Image, bool login)
+    {
+        User_ID = id;
+        User_Password = password;
+        User_Name = name;
+        User_Image = Image;
+        LogIn = login;
     }
 }
 
@@ -76,7 +85,7 @@ public class UserInfo_Manager : MonoBehaviour
 
         foreach (var user in allUsers)
         {
-            if (!user.Value.IsLoggedIn)
+            if (!user.Value.LogIn)
             {
                 Debug.Log($"로그인되지 않은 계정: {user.Key}");
             }
@@ -117,7 +126,7 @@ public class UserInfo_Manager : MonoBehaviour
     {
         try
         {
-            string SQL_Command = "SELECT User_ID, User_Password, User_Name, Image FROM user_info";
+            string SQL_Command = "SELECT User_ID, User_Password, User_Name, Image, Login FROM user_info";
             MySqlCommand cmd = new MySqlCommand(SQL_Command, connection);
             reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -126,8 +135,9 @@ public class UserInfo_Manager : MonoBehaviour
                 string password = reader["User_Password"].ToString();
                 string name = reader["User_Name"].ToString();
                 string image = reader["Image"].ToString();
+                bool logIn = Convert.ToBoolean(reader["LogIn"]);
 
-                allUsers[id] = new User_info(id, password, name, image);
+                allUsers[id] = new User_info(id, password, name, image) { LogIn = logIn };
             }
             if (!reader.IsClosed) reader.Close();
         }
@@ -140,7 +150,7 @@ public class UserInfo_Manager : MonoBehaviour
 
     public bool Login(string id, string password)
     {
-        if (allUsers.ContainsKey(id) && allUsers[id].IsLoggedIn)
+        if (allUsers.ContainsKey(id) && allUsers[id].LogIn)
         {
             Debug.Log("이미 로그인 중인 계정입니다.");
             return false;
@@ -148,14 +158,14 @@ public class UserInfo_Manager : MonoBehaviour
 
         if (allUsers.ContainsKey(id) && allUsers[id].User_Password == password)
         {
-            allUsers[id].IsLoggedIn = true;
+            allUsers[id].LogIn = true;
             info = allUsers[id];
 
             Debug.Log($"{id}로그인 성공");
 
             foreach (var user in allUsers)
             {
-                Debug.Log($"ID: {user.Key}, 로그인 상태: {user.Value.IsLoggedIn}");
+                Debug.Log($"ID: {user.Key}, 로그인 상태: {user.Value.LogIn}");
             }
 
             return true;
@@ -168,14 +178,14 @@ public class UserInfo_Manager : MonoBehaviour
 
     public bool IsAlreadyLoggedIn(string id)
     {
-        return allUsers.ContainsKey(id) && allUsers[id].IsLoggedIn;
+        return allUsers.ContainsKey(id) && allUsers[id].LogIn;
     }
 
     public void Logout(string id)
     {
         if (allUsers.ContainsKey(id))
         {
-            allUsers[id].IsLoggedIn = false;
+            allUsers[id].LogIn = false;
             Debug.Log($"{id} 로그아웃");
         }
     }
