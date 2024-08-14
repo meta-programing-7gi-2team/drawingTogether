@@ -10,12 +10,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class RTCManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject[] seatObjects;
-    public override void OnJoinedRoom()
-    {
-        Debug.Log("Successfully joined room: " + PhotonNetwork.CurrentRoom.Name);
-
-    }
-
+   
     private string GetPlayerImage(Player player)
     {
         if (player.CustomProperties.ContainsKey("UserImage"))

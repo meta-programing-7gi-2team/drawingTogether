@@ -222,8 +222,13 @@ MonoBehaviour:
   SFXSource: {fileID: 0}
   Lobby_Background: {fileID: 0}
   InGame_Background: {fileID: 0}
+  StartGame_SFX: {fileID: 0}
   Timer_SFX: {fileID: 0}
   BtnClick_SFX: {fileID: 0}
+  Clear_SFX: {fileID: 0}
+  CorrectAnswer_SFX: {fileID: 0}
+  ResultWin_SFX: {fileID: 0}
+  ResultLose_SFX: {fileID: 0}
 --- !u!4 &20852021
 Transform:
   m_ObjectHideFlags: 0
@@ -322,8 +327,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1165840768}
-        m_TargetAssemblyTypeName: RoomManager, Assembly-CSharp
+      - m_Target: {fileID: 2004716791}
+        m_TargetAssemblyTypeName: NetworkManager, Assembly-CSharp
         m_MethodName: JoinRoom
         m_Mode: 1
         m_Arguments:
@@ -4759,7 +4764,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 589083120}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2004716791}
+        m_TargetAssemblyTypeName: NetworkManager, Assembly-CSharp
+        m_MethodName: JoinRoom
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &589083120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4902,6 +4919,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61f81f9983a74bd4fa98cd0a342cdc43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  U_Image: 
   DB_Path: 
 --- !u!4 &606487569
 Transform:
@@ -5711,7 +5729,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 719992821}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2004716791}
+        m_TargetAssemblyTypeName: NetworkManager, Assembly-CSharp
+        m_MethodName: JoinRoom
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &719992821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7974,7 +8004,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1038628226}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2004716791}
+        m_TargetAssemblyTypeName: NetworkManager, Assembly-CSharp
+        m_MethodName: JoinRoom
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1038628226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11967,7 +12009,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1566229674}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2004716791}
+        m_TargetAssemblyTypeName: NetworkManager, Assembly-CSharp
+        m_MethodName: JoinRoom
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1566229674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13092,7 +13146,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1810320285}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2004716791}
+        m_TargetAssemblyTypeName: NetworkManager, Assembly-CSharp
+        m_MethodName: JoinRoom
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1810320285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14443,6 +14509,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seatObjects: []
+  roomName: 
   targetPhotonView: {fileID: 0}
 --- !u!4 &2004716793
 Transform:

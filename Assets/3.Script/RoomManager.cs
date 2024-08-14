@@ -31,6 +31,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public void CreateRoom()
     {
+        SceneManager.sceneLoaded += SceneLoaded;
+        SceneManager.LoadScene("IngameUI");
+    }
+
+    private void SceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        NetworkManager.instance.SetPlayerImage(UserInfo_Manager.instance.info.User_Image);
+
         Player_Count = PlayerPrefs.GetInt("Player_Count");
 
         RoomOptions RoomSetting = new RoomOptions { MaxPlayers = Player_Count, IsVisible = true, IsOpen = true, EmptyRoomTtl = 0 };
