@@ -23,15 +23,6 @@ public class User_info
         User_Image = Image;
         LogIn = false;
     }
-
-    public User_info(string id, string password, string name, string Image, bool login)
-    {
-        User_ID = id;
-        User_Password = password;
-        User_Name = name;
-        User_Image = Image;
-        LogIn = login;
-    }
 }
 
 public class UserInfo_Manager : MonoBehaviour
@@ -150,43 +141,101 @@ public class UserInfo_Manager : MonoBehaviour
 
     public bool Login(string id, string password)
     {
-        if (allUsers.ContainsKey(id) && allUsers[id].LogIn)
+        try
         {
-            Debug.Log("이미 로그인 중인 계정입니다.");
-            return false;
-        }
-
-        if (allUsers.ContainsKey(id) && allUsers[id].User_Password == password)
-        {
-            allUsers[id].LogIn = true;
-            info = allUsers[id];
-
-            Debug.Log($"{id}로그인 성공");
-
-            foreach (var user in allUsers)
+            if (!connection_Check(connection))
             {
-                Debug.Log($"ID: {user.Key}, 로그인 상태: {user.Value.LogIn}");
+                return false;
             }
 
-            return true;
+            string checkLoginQuery = $"SELECT LogIn FROM user_info WHERE User_ID ='{id}'";
+            MySqlCommand checkCmd = new MySqlCommand(checkLoginQuery, connection);
+            object logIn = checkCmd.ExecuteScalar();
+
+            if (logIn != null && Convert.ToInt32(logIn) == 1)
+            {
+                Debug.Log("이미 로그인 중인 계정입니다.");
+                return false;
+            }
+
+            string SQL_Command = $"SELECT User_ID, User_Password, User_Name, Image, Login FROM user_info WHERE User_ID='{id}' AND User_Password='{password}'";
+            MySqlCommand cmd = new MySqlCommand(SQL_Command, connection);
+            reader = cmd.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    string Id = reader["User_ID"].ToString();
+                    string Pass = reader["User_Password"].ToString();
+                    string Name = reader["User_Name"].ToString();
+                    string Image = reader["Image"].ToString();
+
+                    if (Id == id && Pass == password)
+                    {
+                        info = new User_info(Id, Pass, Name, Image);
+
+                        reader.Close();
+
+                        string updateLoginStatus = $"UPDATE user_info SET LogIn = 1 WHERE User_ID = '{id}'";
+                        MySqlCommand updateCmd = new MySqlCommand(updateLoginStatus, connection);
+                        updateCmd.ExecuteNonQuery();
+
+                        info.LogIn = true;
+
+                        return true;
+                    }
+                }
+            }
+
+            reader.Close();
+            return false;
         }
-        else
+        catch (Exception e)
         {
+            Debug.Log(e.Message);
+            if (!reader.IsClosed) reader.Close();
             return false;
         }
     }
 
     public bool IsAlreadyLoggedIn(string id)
     {
-        return allUsers.ContainsKey(id) && allUsers[id].LogIn;
+        if (!connection_Check(connection))
+        {
+            return false;
+        }
+
+        string checkLoginQuery = $"SELECT LogIn FROM user_info WHERE User_ID ='{id}'";
+        MySqlCommand checkCmd = new MySqlCommand(checkLoginQuery, connection);
+        object logIn = checkCmd.ExecuteScalar();
+
+        return logIn != null && Convert.ToInt32(logIn) == 1;
     }
 
     public void Logout(string id)
     {
-        if (allUsers.ContainsKey(id))
+        try
         {
-            allUsers[id].LogIn = false;
+            if (!connection_Check(connection))
+            {
+                return;
+            }
+
+            string updateLogoutStatus = $"UPDATE user_info SET LogIn = 0 WHERE User_ID = '{id}'";
+            MySqlCommand cmd = new MySqlCommand(updateLogoutStatus, connection);
+            cmd.ExecuteNonQuery();
+
+            if (allUsers.ContainsKey(id))
+            {
+                allUsers[id].LogIn = false;
+            }
+
             Debug.Log($"{id} 로그아웃");
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
         }
     }
 
@@ -200,11 +249,11 @@ public class UserInfo_Manager : MonoBehaviour
                 return false;
             }
 
-            string SQL_Command = $"INSERT INTO user_info VALUES ('{id}', '{password}', '{name}', 'IM000');";
+            string SQL_Command = $"INSERT INTO user_info (User_ID, User_Password, User_Name, Image, LogIn) VALUES ('{id}', '{password}', '{name}', 'IM000', 0);";
             MySqlCommand cmd = new MySqlCommand(SQL_Command, connection);
             cmd.ExecuteNonQuery();
 
-            allUsers[id] = new User_info(id, password, name, "IM000");
+            allUsers[id] = new User_info(id, password, name, "IM000") { LogIn = false };
             return true;
         }
         catch (Exception e)
@@ -240,6 +289,4 @@ public class UserInfo_Manager : MonoBehaviour
             return false;
         }
     }
-
-    
 }
