@@ -22,11 +22,18 @@ public class RTCManager : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Debug.Log("New player joined. ActorNumber: " + newPlayer.ActorNumber + ", NickName: " + newPlayer.NickName);
+
         string Player_I = GetPlayerImage(newPlayer);
 
         if (seatObjects == null || seatObjects.Length == 0)
         {
             seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
+        }
+
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            string existingPlayerImage = GetPlayerImage(player);
+            photonView.RPC("Room", newPlayer, player.ActorNumber, player.NickName, existingPlayerImage);
         }
 
         photonView.RPC("Room", RpcTarget.All, newPlayer.ActorNumber, newPlayer.NickName, Player_I);
@@ -42,11 +49,11 @@ public class RTCManager : MonoBehaviourPunCallbacks
             GameObject seatObject = seatObjects[playerIndex];
 
             Text playerNameText = seatObject.transform.GetChild(0).GetComponent<Text>();
-            Image Playerimage = seatObject.transform.GetChild(1).GetComponent<Image>();
+            Image playerImage = seatObject.transform.GetChild(1).GetComponent<Image>();
             Sprite playerSprite = Resources.Load<Sprite>($"Player_Image/{image}");
 
             playerNameText.text = NickName;
-            Playerimage.sprite = playerSprite;
+            playerImage.sprite = playerSprite;
         }
         else
         {
