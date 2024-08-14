@@ -61,6 +61,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         SetPlayerImage(UserInfo_Manager.instance.info.User_Image);
 
         PhotonNetwork.JoinRoom(roomName);
+
+        roomName = string.Empty;
     }
 
     public override void OnJoinedRoom()
@@ -69,7 +71,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         PhotonNetwork.Instantiate("PhotonN", Vector3.zero, Quaternion.identity);
     }
-
 
     public void SetPlayerImage(string userImage)
     {

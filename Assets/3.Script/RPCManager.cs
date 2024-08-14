@@ -9,17 +9,15 @@ using Photon.Realtime;
 public class RPCManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject[] seatObjects;
+    private string userImage;
 
     private void Start()
     {
         seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
 
-
         Player player = PhotonNetwork.LocalPlayer;
 
-        string userImage = NetworkManager.instance.GetPlayerImage(player);
-
-        photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, userImage);
+        userImage = NetworkManager.instance.GetPlayerImage(player);
 
         int RoomMax = PhotonNetwork.CurrentRoom.MaxPlayers;
 
@@ -60,6 +58,8 @@ public class RPCManager : MonoBehaviourPunCallbacks
             }
         }
 
+        photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, userImage);
+
         // 모든 클라이언트에게 새 플레이어 정보를 전송
         photonView.RPC("Room", RpcTarget.All, newPlayer.ActorNumber, newPlayer.NickName, Player_I);
     }
@@ -71,7 +71,9 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
-        Debug.Log("dd");
+        Debug.Log("ddd");
+        photonView.RPC("LeftRoom", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber);
+        PhotonNetwork.Destroy(photonView);
     }
 
     [PunRPC]
