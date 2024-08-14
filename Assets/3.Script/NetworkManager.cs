@@ -11,7 +11,6 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     public static NetworkManager instance = null;
-    [SerializeField] private GameObject[] seatObjects;
     public string roomName;
     private int Room_Count;
 
@@ -46,20 +45,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnCreatedRoom() // 방생성에 성공하면 나오는 메소드
     {
         Debug.Log("방생성 완료");
-
-        seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
-
-        Room_Count = PlayerPrefs.GetInt("Player_Count");
-
-        for (int i = 0; i < Room_Count; i++)
-        {
-            seatObjects[i].SetActive(true);
-        }
-
-        for (int i = Room_Count; i < seatObjects.Length; i++)
-        {
-            seatObjects[i].SetActive(false);
-        }
     }
 
     public void JoinRoom()
@@ -77,6 +62,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRoom(roomName);
     }
 
+    public override void OnJoinedRoom()
+    {
+        Debug.Log("Successfully joined room: " + PhotonNetwork.CurrentRoom.Name);
+
+        PhotonNetwork.Instantiate("PhotonN", Vector3.zero, Quaternion.identity);
+    }
+
+
     public void SetPlayerImage(string userImage)
     {
         Hashtable customProperties = new Hashtable();
@@ -92,13 +85,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
         return null;
     }
-
-    public override void OnJoinedRoom()
-    {
-        Debug.Log("Successfully joined room: " + PhotonNetwork.CurrentRoom.Name);
-
-        PhotonNetwork.Instantiate("PhotonN", Vector3.zero, Quaternion.identity);
-    }
+    
     #endregion
 
     #region 게임 종료

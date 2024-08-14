@@ -14,11 +14,24 @@ public class RPCManager : MonoBehaviourPunCallbacks
     {
         seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
 
+
         Player player = PhotonNetwork.LocalPlayer;
 
         string userImage = NetworkManager.instance.GetPlayerImage(player);
 
         photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, userImage);
+        
+        int RoomMax = PhotonNetwork.CurrentRoom.MaxPlayers;
+
+        for (int i = 0; i < RoomMax; i++)
+        {
+            seatObjects[i].SetActive(true);
+        }
+
+        for (int i = RoomMax; i < seatObjects.Length; i++)
+        {
+            seatObjects[i].SetActive(false);
+        }
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -26,7 +39,6 @@ public class RPCManager : MonoBehaviourPunCallbacks
         Debug.Log("New player joined. ActorNumber: " + newPlayer.ActorNumber + ", NickName: " + newPlayer.NickName);
 
         string Player_I = NetworkManager.instance.GetPlayerImage(newPlayer);
-
 
         // 새로 들어온 플레이어에게 기존 플레이어들의 정보를 전송
         foreach (Player player in PhotonNetwork.PlayerList)
@@ -40,6 +52,25 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
         // 모든 클라이언트에게 새 플레이어 정보를 전송
         photonView.RPC("Room", RpcTarget.All, newPlayer.ActorNumber, newPlayer.NickName, Player_I);
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        photonView.RPC("LeftRoom", RpcTarget.All, otherPlayer.ActorNumber);
+    }
+
+    [PunRPC]
+    public void LeftRoom(int otherPlayer)
+    {
+        GameObject LeftPlayer = seatObjects[otherPlayer];
+
+        Text player_t = LeftPlayer.transform.GetChild(0).GetComponent<Text>();
+        Image player_m = LeftPlayer.transform.GetChild(1).GetComponent<Image>();
+        Color color = player_m.color;
+        color.a = 0;
+        player_m.color = color;
+
+        player_t.text = string.Empty;
     }
 
     [PunRPC]
