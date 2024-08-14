@@ -135,6 +135,9 @@ public class Drawable : MonoBehaviour
 
             for (int y = center_y - pen_thickness; y <= center_y + pen_thickness; y++)
             {
+                if (y >= (int)drawable_sprite.rect.width || y < 0)
+                    continue;
+
                 MarkPixelToChange(x, y, color_of_pen);
             }
         }
