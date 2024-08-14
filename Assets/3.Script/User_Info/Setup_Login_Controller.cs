@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using TMPro;
 using Photon.Pun;
 
@@ -31,19 +30,19 @@ public class Setup_Login_Controller : MonoBehaviourPunCallbacks
             return;
         }
 
-        bool loginResult = UserInfo_Manager.instance.Login(ID_input.text, Password_input.text);
+        if (UserInfo_Manager.instance.IsAlreadyLoggedIn(ID_input.text))
+        {
+            Log.text = "이미 로그인 된 계정입니다.";
+            return;
+        }
 
-        if (loginResult)
+        if (UserInfo_Manager.instance.Login(ID_input.text, Password_input.text))
         {
             User_info info = UserInfo_Manager.instance.info;
             Loding_UI.SetActive(true);
             Log.text = string.Empty;
             NetworkManager.instance.Connect();
             Debug.Log(info.User_ID + " | " + info.User_Password + "로그인 성공!");
-        }
-        else if (UserInfo_Manager.instance.IsAlreadyLoggedIn(ID_input.text))
-        {
-            S_Log.text = "이미 로그인 중인 계정입니다.";
         }
         else
         {
@@ -60,6 +59,7 @@ public class Setup_Login_Controller : MonoBehaviourPunCallbacks
 
     public void SetUp_Btn()
     {
+
         if (NickName_input.text.Equals(string.Empty) || id_input.text.Equals(string.Empty) || password_input.text.Equals(string.Empty))
         {
             S_Log.text = "닉네임, 아이디, 비밀번호를 입력하세요.";
