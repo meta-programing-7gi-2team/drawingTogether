@@ -60,6 +60,14 @@ public class RPCManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
+    public void UpdatePlayerPosition(int roomIndex, int viewID)
+    {
+        GameObject player = PhotonView.Find(viewID).gameObject;
+
+        player.transform.SetParent(seatObjects[roomIndex].transform);
+    }
+
+    [PunRPC]
     public void LeftRoom(int otherPlayer)
     {
         int playerIndex = otherPlayer - 1;
