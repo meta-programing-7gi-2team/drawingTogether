@@ -83,9 +83,11 @@ public class RPCManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void Player_C()
     {
-        int t = PhotonNetwork.CurrentRoom.PlayerCount - 1;
-
-        transform.SetParent(seatObjects[t].transform);
+        if (photonView.IsMine)
+        {
+            int t = PhotonNetwork.CurrentRoom.PlayerCount - 1;
+            transform.SetParent(seatObjects[t].transform);
+        }
     }
 
     [PunRPC]
