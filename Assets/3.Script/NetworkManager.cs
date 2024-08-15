@@ -12,7 +12,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 {
     public static NetworkManager instance = null;
     public string roomName;
-    private int Room_Count;
+    public GameObject player;
+    public int Room_C;
     [SerializeField] private GameObject[] seatObjects;
 
     private void Awake()
@@ -37,15 +38,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
 
-        GameObject Player = PhotonNetwork.Instantiate("PhotonN", Vector3.zero, Quaternion.identity);
+        player = PhotonNetwork.Instantiate("PhotonN", Vector3.zero, Quaternion.identity);
 
-        int Room = PhotonNetwork.CurrentRoom.PlayerCount - 1;
+        Room_C = PhotonNetwork.CurrentRoom.PlayerCount - 1;
 
-        Player.transform.SetParent(seatObjects[Room].transform);
-
-        RPCManager RPC = Player.GetComponent<RPCManager>();
-
-        RPC.ad(Player, Room);
+        player.transform.SetParent(seatObjects[Room_C].transform);
     }
 
     public void SetPlayerImage(string userImage)

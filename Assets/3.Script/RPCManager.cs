@@ -30,6 +30,8 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
         userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
 
+        photonView.RPC("UpdatePlayerPosition", RpcTarget.OthersBuffered, NetworkManager.instance.Room_C, NetworkManager.instance.player.GetComponent<PhotonView>().ViewID);
+
         photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, userImage);
     }
 
@@ -90,7 +92,7 @@ public class RPCManager : MonoBehaviourPunCallbacks
         playerImage.sprite = playerSprite;
     }
 
-    public void ad(GameObject player, int Room)
+    public void tttt(GameObject player, int Room)
     {
         photonView.RPC("UpdatePlayerPosition", RpcTarget.OthersBuffered, Room, player.GetComponent<PhotonView>().ViewID);
     }
