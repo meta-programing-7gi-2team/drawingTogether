@@ -30,15 +30,7 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
         userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
 
-        if (photonView.IsMine)
-        {
-            int Room = PhotonNetwork.CurrentRoom.PlayerCount - 1;
-            transform.SetParent(seatObjects[Room].transform);
-
-            photonView.RPC("Player_C", RpcTarget.OthersBuffered, Room);
-
-            photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, userImage);
-        }
+        photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, userImage);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -81,15 +73,6 @@ public class RPCManager : MonoBehaviourPunCallbacks
         player_m.color = color;
 
         player_t.text = string.Empty;
-    }
-
-    [PunRPC]
-    public void Player_C(int room)
-    {
-        if (photonView.IsMine)
-        {
-            transform.SetParent(seatObjects[room].transform);
-        }
     }
 
     [PunRPC]

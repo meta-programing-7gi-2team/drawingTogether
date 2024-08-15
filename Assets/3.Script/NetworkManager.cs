@@ -35,7 +35,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("Successfully joined room: " + PhotonNetwork.CurrentRoom.Name);
 
-        PhotonNetwork.Instantiate("PhotonN", Vector3.zero, Quaternion.identity);
+        seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
+
+        GameObject Player = PhotonNetwork.Instantiate("PhotonN", Vector3.zero, Quaternion.identity);
+
+        int Room = PhotonNetwork.CurrentRoom.PlayerCount - 1;
+
+        Player.transform.SetParent(seatObjects[Room].transform);
     }
 
     public void SetPlayerImage(string userImage)
