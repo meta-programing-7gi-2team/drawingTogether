@@ -13,7 +13,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public static NetworkManager instance = null;
     public string roomName;
     public GameObject player;
-    public int Room_C;
     [SerializeField] private GameObject[] seatObjects;
 
     private void Awake()
@@ -36,13 +35,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("Successfully joined room: " + PhotonNetwork.CurrentRoom.Name);
 
-        seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
-
         player = PhotonNetwork.Instantiate("PhotonN", Vector3.zero, Quaternion.identity);
-
-        Room_C = PhotonNetwork.CurrentRoom.PlayerCount - 1;
-
-        player.transform.SetParent(seatObjects[Room_C].transform);
     }
 
     public void SetPlayerImage(string userImage)
