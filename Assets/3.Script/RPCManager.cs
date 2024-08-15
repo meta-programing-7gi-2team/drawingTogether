@@ -89,4 +89,13 @@ public class RPCManager : MonoBehaviourPunCallbacks
         playerNameText.text = NickName;
         playerImage.sprite = playerSprite;
     }
+
+    [PunRPC]
+    public void UpdatePlayerPosition(int roomIndex, int viewID)
+    {
+        Debug.Log("ddd");
+        GameObject player = PhotonView.Find(viewID).gameObject;
+
+        player.transform.SetParent(seatObjects[roomIndex].transform);
+    }
 }

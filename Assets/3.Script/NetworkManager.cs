@@ -43,17 +43,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         Player.transform.SetParent(seatObjects[Room].transform);
 
-        PhotonView PV = FindObjectOfType<PhotonView>();
+        PhotonView PV = Player.GetComponent<PhotonView>();
 
         PV.RPC("UpdatePlayerPosition", RpcTarget.OthersBuffered, Room, Player.GetComponent<PhotonView>().ViewID);
-    }
-
-    [PunRPC]
-    public void UpdatePlayerPosition(int roomIndex, int viewID)
-    {
-        GameObject player = PhotonView.Find(viewID).gameObject;
-
-        player.transform.SetParent(seatObjects[roomIndex].transform);
     }
 
     public void SetPlayerImage(string userImage)
