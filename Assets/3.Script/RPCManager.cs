@@ -34,7 +34,7 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
         photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, userImage);
 
-        photonView.RPC("Player_C", RpcTarget.All);
+        photonView.RPC("Player_C", PhotonNetwork.LocalPlayer);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
