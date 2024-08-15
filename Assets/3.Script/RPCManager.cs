@@ -10,7 +10,6 @@ public class RPCManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject[] seatObjects;
     private string userImage;
-    private List<Queue> RoomList = new List<Queue>();
 
     private void Start()
     {
@@ -28,9 +27,7 @@ public class RPCManager : MonoBehaviourPunCallbacks
             seatObjects[i].SetActive(false);
         }
 
-        int Room_C = PhotonNetwork.CurrentRoom.PlayerCount - 1;
-
-        NetworkManager.instance.player.transform.SetParent(seatObjects[Room_C].transform);
+        photonView.RPC("Parentplayer", RpcTarget.All);
 
         userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
 
@@ -94,17 +91,13 @@ public class RPCManager : MonoBehaviourPunCallbacks
         playerImage.sprite = playerSprite;
     }
 
-    public void tttt(GameObject player, int Room)
-    {
-        photonView.RPC("UpdatePlayerPosition", RpcTarget.OthersBuffered, Room, player.GetComponent<PhotonView>().ViewID);
-    }
-
     [PunRPC]
-    public void UpdatePlayerPosition(int roomIndex, int viewID)
+    public void Parentplayer()
     {
-        Debug.Log("ddd");
-        GameObject player = PhotonView.Find(viewID).gameObject;
+        Debug.Log("けしいけし");
+        
+        int Room_C = PhotonNetwork.CurrentRoom.PlayerCount - 1;
 
-        player.transform.SetParent(seatObjects[roomIndex].transform);
+        NetworkManager.instance.player.transform.SetParent(seatObjects[Room_C].transform);
     }
 }
