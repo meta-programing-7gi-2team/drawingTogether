@@ -90,6 +90,11 @@ public class RPCManager : MonoBehaviourPunCallbacks
         playerImage.sprite = playerSprite;
     }
 
+    public void ad(GameObject player, int Room)
+    {
+        photonView.RPC("UpdatePlayerPosition", RpcTarget.OthersBuffered, Room, player.GetComponent<PhotonView>().ViewID);
+    }
+
     [PunRPC]
     public void UpdatePlayerPosition(int roomIndex, int viewID)
     {
