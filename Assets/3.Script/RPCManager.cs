@@ -34,7 +34,7 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
         photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, userImage);
 
-        photonView.RPC("Player_C", PhotonNetwork.LocalPlayer);
+        photonView.RPC("Player_C", RpcTarget.All);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -50,6 +50,8 @@ public class RPCManager : MonoBehaviourPunCallbacks
             string existingPlayerImage = NetworkManager.instance.GetPlayerImage(player);
     
             photonView.RPC("Room", newPlayer, player.ActorNumber, player.NickName, existingPlayerImage);
+
+            photonView.RPC("Player_C", RpcTarget.All);
         }
     
         // 모든 클라이언트에게 새 플레이어 정보를 전송
