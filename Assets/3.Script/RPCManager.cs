@@ -30,7 +30,7 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
         userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
 
-        photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, userImage);
+        photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, userImage);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -45,12 +45,12 @@ public class RPCManager : MonoBehaviourPunCallbacks
     
             string existingPlayerImage = NetworkManager.instance.GetPlayerImage(player);
     
-            photonView.RPC("Room", newPlayer, player.ActorNumber, player.NickName, existingPlayerImage);
+            photonView.RPC("Room", newPlayer, player.NickName, existingPlayerImage);
         }
 
         // 모든 클라이언트에게 새 플레이어 정보를 전송
 
-        photonView.RPC("Room", RpcTarget.All, newPlayer.ActorNumber, newPlayer.NickName, Player_I);
+        photonView.RPC("Room", RpcTarget.All, newPlayer.NickName, Player_I);
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -76,27 +76,17 @@ public class RPCManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void Room(int ActorNumber, string NickName, string image)
+    public void Room(string NickName, string image)
     {
-        int playerIndex = ActorNumber - 1;
+        GameObject parents = transform.parent.gameObject;
+        Text playerNameText = parents.transform.GetChild(0).GetComponent<Text>();
+        Image playerImage = parents.transform.GetChild(1).GetComponent<Image>();
+        Sprite playerSprite = Resources.Load<Sprite>($"Player_Image/{image}");
+        Color color = playerImage.color;
+        color.a = 1;
+        playerImage.color = color;
 
-        if (playerIndex < seatObjects.Length)
-        {
-            GameObject seatObject = seatObjects[playerIndex];
-        
-            Text playerNameText = seatObject.transform.GetChild(0).GetComponent<Text>();
-            Image playerImage = seatObject.transform.GetChild(1).GetComponent<Image>();
-            Sprite playerSprite = Resources.Load<Sprite>($"Player_Image/{image}");
-            Color color = playerImage.color;
-            color.a = 1;
-            playerImage.color = color;
-        
-            playerNameText.text = NickName;
-            playerImage.sprite = playerSprite;
-        }
-        else
-        {
-            Debug.Log("No available seat for player " + NickName);
-        }
+        playerNameText.text = NickName;
+        playerImage.sprite = playerSprite;
     }
 }
