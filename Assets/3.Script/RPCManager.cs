@@ -32,9 +32,9 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
         userImage = NetworkManager.instance.GetPlayerImage(player);
 
-        photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, userImage);
-
         photonView.RPC("Player_C", RpcTarget.All);
+
+        photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, userImage);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -49,12 +49,15 @@ public class RPCManager : MonoBehaviourPunCallbacks
     
             string existingPlayerImage = NetworkManager.instance.GetPlayerImage(player);
     
-            photonView.RPC("Room", newPlayer, player.ActorNumber, player.NickName, existingPlayerImage);
+            photonView.RPC("Player_C", newPlayer);
 
-            photonView.RPC("Player_C", RpcTarget.All);
+            photonView.RPC("Room", newPlayer, player.ActorNumber, player.NickName, existingPlayerImage);
         }
-    
+
         // 모든 클라이언트에게 새 플레이어 정보를 전송
+
+        photonView.RPC("Player_C", RpcTarget.All);
+
         photonView.RPC("Room", RpcTarget.All, newPlayer.ActorNumber, newPlayer.NickName, Player_I);
     }
 
