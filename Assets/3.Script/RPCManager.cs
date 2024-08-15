@@ -10,6 +10,7 @@ public class RPCManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject[] seatObjects;
     private string userImage;
+    private List<Queue> RoomList = new List<Queue>();
 
     private void Start()
     {
@@ -32,7 +33,6 @@ public class RPCManager : MonoBehaviourPunCallbacks
         {
             seatObjects[i].SetActive(false);
         }
-
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -51,17 +51,6 @@ public class RPCManager : MonoBehaviourPunCallbacks
             photonView.RPC("Room", newPlayer, player.ActorNumber, player.NickName, existingPlayerImage);
         }
 
-        for (int i = 0; i < seatObjects.Length; i++)
-        {
-            if (seatObjects[i].transform.childCount.Equals(4))
-            {
-                transform.SetParent(seatObjects[i].transform);
-                break;
-            }
-        }
-
-        photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, userImage);
-
         // 모든 클라이언트에게 새 플레이어 정보를 전송
         photonView.RPC("Room", RpcTarget.All, newPlayer.ActorNumber, newPlayer.NickName, Player_I);
     }
@@ -69,19 +58,21 @@ public class RPCManager : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         Debug.Log(otherPlayer);
-        photonView.RPC("LeftRoom", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber);
+        photonView.RPC("LeftRoom", RpcTarget.All, otherPlayer.ActorNumber);
     }
 
     public override void OnLeftRoom()
     {
         Debug.Log("ddd");
-        photonView.RPC("LeftRoom", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber);
+        //photonView.RPC("LeftRoom", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber);
     }
 
     [PunRPC]
     public void LeftRoom(int otherPlayer)
     {
-        GameObject LeftPlayer = seatObjects[otherPlayer];
+        int playerIndex = otherPlayer - 1;
+
+        GameObject LeftPlayer = seatObjects[playerIndex];
 
         Text player_t = LeftPlayer.transform.GetChild(0).GetComponent<Text>();
         Image player_m = LeftPlayer.transform.GetChild(1).GetComponent<Image>();
@@ -96,7 +87,18 @@ public class RPCManager : MonoBehaviourPunCallbacks
     public void Room(int ActorNumber, string NickName, string image)
     {
         int playerIndex = ActorNumber - 1;
-        
+
+        Debug.Log(playerIndex);
+
+        for (int i = 0; i < seatObjects.Length; i++)
+        {
+            if (seatObjects[i].transform.childCount.Equals(4))
+            {
+                transform.SetParent(seatObjects[i].transform);
+                break;
+            }
+        }
+
         if (playerIndex < seatObjects.Length)
         {
             GameObject seatObject = seatObjects[playerIndex];
