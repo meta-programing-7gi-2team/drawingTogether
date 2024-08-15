@@ -30,7 +30,10 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
         userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
 
-        photonView.RPC("Player_C", PhotonNetwork.LocalPlayer);
+        int t = PhotonNetwork.CurrentRoom.PlayerCount - 1;
+        transform.SetParent(seatObjects[t].transform);
+
+        photonView.RPC("Player_C", RpcTarget.Others);
 
         photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, userImage);
     }
