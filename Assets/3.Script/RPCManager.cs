@@ -28,11 +28,9 @@ public class RPCManager : MonoBehaviourPunCallbacks
             seatObjects[i].SetActive(false);
         }
 
-        Player player = PhotonNetwork.LocalPlayer;
+        userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
 
-        userImage = NetworkManager.instance.GetPlayerImage(player);
-
-        photonView.RPC("Player_C", RpcTarget.All);
+        photonView.RPC("Player_C", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber);
 
         photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, userImage);
     }
@@ -80,23 +78,16 @@ public class RPCManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void Player_C()
+    public void Player_C(int ActorNumber)
     {
         int t = PhotonNetwork.CurrentRoom.PlayerCount - 1;
 
-        Debug.Log(t);
+        Player targetPlayer = PhotonNetwork.CurrentRoom.GetPlayer(ActorNumber);
 
-        transform.SetParent(seatObjects[t].transform);
-
-
-        //for (int i = 0; i < seatObjects.Length; i++)
-        //{
-        //    if (seatObjects[i].transform.childCount == 4)
-        //    {
-        //        transform.SetParent(seatObjects[i].transform);
-        //        break;
-        //    }
-        //}
+        if(ActorNumber == targetPlayer.ActorNumber)
+        {
+            transform.SetParent(seatObjects[t].transform);
+        }
     }
 
     [PunRPC]
