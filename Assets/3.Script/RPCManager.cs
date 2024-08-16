@@ -12,7 +12,6 @@ public class RPCManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject[] seatObjects;
     [SerializeField] private GameObject Start_Btu;
     [SerializeField] private string TargetObject;
-    private List<Queue<Player>> Game_Num = new List<Queue<Player>>();
 
     private void Start()
     {

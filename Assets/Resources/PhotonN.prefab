@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8623785131520000425}
   - component: {fileID: 2744957733589315311}
   - component: {fileID: 444028222761196966}
+  - component: {fileID: 4775257244195399665}
   m_Layer: 0
   m_Name: PhotonN
   m_TagString: Untagged
@@ -84,4 +85,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   input_F: {fileID: 0}
   word: {fileID: 0}
+  text: {fileID: 0}
   bubble: {fileID: 0}
+--- !u!114 &4775257244195399665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8899083981430486977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9314fcbf87323a43b5952f244e44246, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Start_Btu: {fileID: 0}
