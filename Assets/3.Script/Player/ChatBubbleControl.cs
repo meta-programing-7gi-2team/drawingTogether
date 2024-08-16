@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 using DG.Tweening;
 using Photon.Pun;
@@ -56,7 +57,7 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
         {
             Debug.Log(photonView.ViewID);
             Debug.Log(photonView.IsMine);
-            if (photonView.IsMine) return;
+            if (!photonView.IsMine) return;
 
             if(!NetworkManager.instance.Game_Check)
             {
@@ -76,11 +77,17 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
     public void Send()
     {
         photonView.RPC("Chat", RpcTarget.All, input_F.text);
+
+        EventSystem.current.SetSelectedGameObject(input_F.gameObject, null);
+        input_F.OnPointerClick(new PointerEventData(EventSystem.current));
     }
 
     public void Bubble_Send()
     {
         photonView.RPC("BubbleChat", RpcTarget.All, input_F.text);
+
+        EventSystem.current.SetSelectedGameObject(input_F.gameObject, null);
+        input_F.OnPointerClick(new PointerEventData(EventSystem.current));
     }
 
     [PunRPC]
