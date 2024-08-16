@@ -38,7 +38,7 @@ MonoBehaviour:
   - DestroyRpc
   - DestroySpaceship
   - Fire
-  - LeftRoom
+  - LeaveRoom
   - RespawnSpaceship
   - Room
   DisableAutoOpenWizard: 1
