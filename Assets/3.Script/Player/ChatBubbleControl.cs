@@ -17,6 +17,27 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GameObject inputs = GameObject.FindGameObjectWithTag("Input");
+            GameObject TMP = GameObject.FindGameObjectWithTag("TMPChat");
+            GameObject parentObject = gameObject.transform.parent.gameObject;
+
+            Debug.Log(parentObject);
+
+            text = TMP.GetComponent<TMP_Text>();
+            input_F = inputs.GetComponent<InputField>();
+            word = parentObject.transform.GetChild(3).transform.GetChild(0).GetComponent<Text>();
+            bubble = parentObject.transform.GetChild(3).GetComponent<Transform>();
+        }
+        else
+        {
+            Invoke("Test", 0.8f);
+        }
+    }
+
+    private void Test()
+    {
         GameObject inputs = GameObject.FindGameObjectWithTag("Input");
         GameObject TMP = GameObject.FindGameObjectWithTag("TMPChat");
         GameObject parentObject = gameObject.transform.parent.gameObject;
