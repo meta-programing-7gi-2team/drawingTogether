@@ -41,6 +41,9 @@ MonoBehaviour:
   - LeaveRoom
   - RespawnSpaceship
   - Room
+  - ChatRPC
+  - Chat
+  - BubbleChat
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -7,6 +7,8 @@ TagManager:
   - Player_Room
   - Bullet
   - GameStart
+  - Input
+  - TMPChat
   layers:
   - Default
   - TransparentFX

@@ -13,6 +13,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public static NetworkManager instance = null;
     public GameObject test;
     public string roomName;
+    public bool Game_Check = false;
 
     private void Awake()
     {
