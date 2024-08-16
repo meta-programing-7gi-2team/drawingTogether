@@ -108,7 +108,7 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        photonView.RPC("LeaveRoom", RpcTarget.Others, otherPlayer.NickName);
+        photonView.RPC("LeaveRoom", RpcTarget.All, otherPlayer.NickName);
     }
 
     [PunRPC]
