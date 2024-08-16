@@ -60,8 +60,7 @@ public class RPCManager : MonoBehaviourPunCallbacks
     {
         string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);       
 
-        photonView.RPC("Room", newPlayer, PhotonNetwork.LocalPlayer.NickName, userImage);
-
+        photonView.RPC("Room", RpcTarget.Others, PhotonNetwork.LocalPlayer.NickName, userImage);
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
