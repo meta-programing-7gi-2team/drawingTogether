@@ -13,26 +13,6 @@ public class RPCManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject Start_Btu;
     private List<Queue<Player>> Game_Num = new List<Queue<Player>>();
 
-    private void Start()
-    {
-        seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
-
-        int RoomMax = PhotonNetwork.CurrentRoom.MaxPlayers;
-
-        for (int i = 0; i < RoomMax; i++)
-        {
-            seatObjects[i].SetActive(true);
-        }
-
-        for (int i = RoomMax; i < seatObjects.Length; i++)
-        {
-            seatObjects[i].SetActive(false);
-        }
-
-        seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
-
-    }
-
     public void RoomJoinRpc()
     {
         if(PhotonNetwork.IsMasterClient)
@@ -59,8 +39,6 @@ public class RPCManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            Invoke("Room_C", 0.5f);
-
             seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
 
             int RoomMax = PhotonNetwork.CurrentRoom.MaxPlayers;
@@ -77,6 +55,8 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
             seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
 
+            Invoke("Room_C", 0.5f);
+
             Start_Btu = GameObject.FindGameObjectWithTag("GameStart");
 
             Start_Btu.SetActive(false);
@@ -92,7 +72,6 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        Debug.Log(otherPlayer);
         photonView.RPC("LeaveRoom", RpcTarget.Others, otherPlayer.NickName);
     }
 
