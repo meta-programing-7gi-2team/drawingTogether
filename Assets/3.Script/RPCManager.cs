@@ -31,8 +31,6 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
         seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
 
-        Start_Btu = GameObject.FindGameObjectWithTag("GameStart");
-
     }
 
     public void RoomJoinRpc()
@@ -50,9 +48,11 @@ public class RPCManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            Start_Btu.SetActive(false);
-
             Invoke("Room_C", 0.5f);
+
+            Start_Btu = GameObject.FindGameObjectWithTag("GameStart");
+
+            Start_Btu.SetActive(false);
         }
     }
 
