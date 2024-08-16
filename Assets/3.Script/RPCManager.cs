@@ -10,7 +10,6 @@ public class RPCManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject[] seatObjects;
     private string userImage;
-    private List<Queue> RoomList = new List<Queue>();
 
     private void Start()
     {
@@ -28,11 +27,19 @@ public class RPCManager : MonoBehaviourPunCallbacks
             seatObjects[i].SetActive(false);
         }
 
-        int Room_C = PhotonNetwork.CurrentRoom.PlayerCount - 1;
-
-        NetworkManager.instance.player.transform.SetParent(seatObjects[Room_C].transform);
+        foreach (GameObject seat in seatObjects)
+        {
+            if (seat.transform.childCount == 4)
+            {
+                gameObject.transform.SetParent(seat.transform);
+                Debug.Log($"Player assigned to {seat.name}");
+                break;
+            }
+        }
 
         userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
+
+        int Room_C = PhotonNetwork.CurrentRoom.PlayerCount - 1;
 
         photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, userImage);
     }
@@ -94,17 +101,4 @@ public class RPCManager : MonoBehaviourPunCallbacks
         playerImage.sprite = playerSprite;
     }
 
-    public void tttt(GameObject player, int Room)
-    {
-        photonView.RPC("UpdatePlayerPosition", RpcTarget.OthersBuffered, Room, player.GetComponent<PhotonView>().ViewID);
-    }
-
-    [PunRPC]
-    public void UpdatePlayerPosition(int roomIndex, int viewID)
-    {
-        Debug.Log("ddd");
-        GameObject player = PhotonView.Find(viewID).gameObject;
-
-        player.transform.SetParent(seatObjects[roomIndex].transform);
-    }
 }

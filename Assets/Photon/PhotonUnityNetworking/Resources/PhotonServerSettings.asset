@@ -38,12 +38,9 @@ MonoBehaviour:
   - DestroyRpc
   - DestroySpaceship
   - Fire
-  - RespawnSpaceship
-  - AddNicknameToList
-  - RemoveNicknameFromList
-  - MyRpcMethod
-  - Room
   - LeftRoom
+  - RespawnSpaceship
+  - Room
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
   DevRegionSetOnce: 1

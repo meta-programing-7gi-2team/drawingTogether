@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 using Photon.Pun;
 
@@ -39,13 +40,20 @@ public class LoginControl : MonoBehaviourPunCallbacks
             User_info info = UserInfo_Manager.instance.info;
             Loading_UI.SetActive(true);
             L_Log.text = string.Empty;
-            PhotonNetwork.ConnectUsingSettings();
             Debug.Log(info.User_ID + " | " + info.User_Password + "로그인 성공!");
+            PhotonNetwork.ConnectUsingSettings();
         }
         else
         {
             L_Log.text = "아이디와 비밀번호를 확인해주세요.";
         }
+    }
+
+    public override void OnConnectedToMaster()
+    {
+        SceneManager.LoadScene("MainScene");
+        PhotonNetwork.NickName = UserInfo_Manager.instance.info.User_Name;
+        PhotonNetwork.JoinLobby();
     }
 
     public void Open_SignUp()

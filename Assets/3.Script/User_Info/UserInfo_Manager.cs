@@ -25,6 +25,24 @@ public class User_info
     }
 }
 
+public class Jdata_DB
+{
+    public string IP { get; set; }
+    public string TableName { get; set; }
+    public string ID { get; set; }
+    public string PW { get; set; }
+    public string PORT { get; set; }
+
+    public Jdata_DB()
+    {
+        IP = "34.207.226.217";
+        TableName = "programming";
+        ID = "root";
+        PW = "1234";
+        PORT = "3306";
+    }
+}
+
 public class UserInfo_Manager : MonoBehaviour
 {
     public User_info info;
@@ -83,21 +101,51 @@ public class UserInfo_Manager : MonoBehaviour
         }
     }
 
+    private string JsonCreate()
+    {
+        List<Jdata_DB> jdata = new List<Jdata_DB>();
+        jdata.Add(new Jdata_DB());
+
+        JsonData data = JsonMapper.ToJson(jdata);
+
+        return data.ToString();
+    }
+
     private string Server_Set(string path)
     {
+        string filePath = path + "/config.json";
         if (!File.Exists(path))
         {
             Directory.CreateDirectory(path);
+            if (!File.Exists(filePath))
+            {
+                File.WriteAllText(filePath, JsonCreate());
+            }
         }
-        string JsonString = File.ReadAllText(path + "/config.json");
-        JsonData UserData = JsonMapper.ToObject(JsonString);
-        string serverInfo = $"Server={UserData[0]["IP"]};" +
-                          $"Database={UserData[0]["TableName"]};" +
-                          $"Uid={UserData[0]["ID"]};" +
-                          $"Pwd={UserData[0]["PW"]};" +
-                          $"Port={UserData[0]["PORT"]};" +
-                          "CharSet=utf8;";
-        return serverInfo;
+
+        string configFilePath = Path.Combine(path, "config.json");
+
+        if (!File.Exists(configFilePath))
+        {
+            return "Server=34.207.226.217;" +
+                   "Database=programming;" +
+                   "Uid=root;" +
+                   "Pwd=1234;" +
+                   "Port=3306;" +
+                   "CharSet=utf8;";
+        }
+        else
+        {
+            string jsonString = File.ReadAllText(configFilePath);
+            JsonData userData = JsonMapper.ToObject(jsonString);
+            string serverInfo = $"Server={userData[0]["IP"]};" +
+                                $"Database={userData[0]["TableName"]};" +
+                                $"Uid={userData[0]["ID"]};" +
+                                $"Pwd={userData[0]["PW"]};" +
+                                $"Port={userData[0]["PORT"]};" +
+                                "CharSet=utf8;";
+            return serverInfo;
+        }
     }
 
     private bool Connection_Check(MySqlConnection con)

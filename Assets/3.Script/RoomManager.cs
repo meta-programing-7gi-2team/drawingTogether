@@ -26,13 +26,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
     }
 
     #region 방관련
-
-    public override void OnConnectedToMaster() // 서버 연결 완료되면 콜되는 메소드
-    {
-        PhotonNetwork.NickName = UserInfo_Manager.instance.info.User_Name;
-        PhotonNetwork.JoinLobby(); // 로비 접속 시작
-    }
-
     public void Player_Count_T(int Player)
     {
         PlayerPrefs.SetInt("Player_Count", Player);
