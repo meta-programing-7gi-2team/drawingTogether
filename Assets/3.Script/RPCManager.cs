@@ -34,6 +34,10 @@ public class RPCManager : MonoBehaviourPunCallbacks
     {
         if(PhotonNetwork.IsMasterClient)
         {
+            GameObject Start_Btu = GameObject.FindGameObjectWithTag("GameStart");
+
+            Start_Btu.SetActive(true);
+
             seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
 
             string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
