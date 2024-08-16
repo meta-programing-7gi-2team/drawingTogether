@@ -35,7 +35,7 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
             string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
 
-            photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, userImage);
+            photonView.RPC("Room", PhotonNetwork.LocalPlayer, PhotonNetwork.LocalPlayer.NickName, userImage);
         }
         else
         {
@@ -61,6 +61,17 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
             Start_Btu.SetActive(false);
         }
+    }
+
+    public void Room_C()
+    {
+        seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
+
+        string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
+
+        photonView.RPC("Room", PhotonNetwork.LocalPlayer, PhotonNetwork.LocalPlayer.NickName, userImage);
+
+        photonView.RPC("Room", RpcTarget.Others, PhotonNetwork.LocalPlayer.NickName, userImage);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -123,14 +134,4 @@ public class RPCManager : MonoBehaviourPunCallbacks
             }
         }
     }
-
-    public void Room_C()
-    {
-        seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
-
-        string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
-
-        photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, userImage);
-    }
-
 }
