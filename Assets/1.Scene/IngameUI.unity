@@ -1741,6 +1741,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputFields: []
+  texture: {fileID: 2800000, guid: a33b8a6cf583c534b83219b0504884d0, type: 3}
 --- !u!1 &329392073
 GameObject:
   m_ObjectHideFlags: 0
@@ -1779,7 +1780,6 @@ MonoBehaviour:
     m_Bits: 64
   Reset_Canvas_On_Play: 1
   Reset_color: {r: 1, g: 1, b: 1, a: 1}
-  texture: {fileID: 0}
 --- !u!212 &329392075
 SpriteRenderer:
   m_ObjectHideFlags: 0
