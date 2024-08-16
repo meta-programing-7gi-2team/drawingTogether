@@ -10,6 +10,7 @@ using Photon.Realtime;
 public class RPCManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject[] seatObjects;
+    [SerializeField] private GameObject Start_Btu;
     private List<Queue<Player>> Game_Num = new List<Queue<Player>>();
 
     private void Start()
@@ -28,15 +29,18 @@ public class RPCManager : MonoBehaviourPunCallbacks
             seatObjects[i].SetActive(false);
         }
 
+        seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
+
+        Start_Btu = GameObject.FindGameObjectWithTag("GameStart");
+
     }
 
     public void RoomJoinRpc()
     {
         if(PhotonNetwork.IsMasterClient)
         {
-            GameObject Start_Btu = GameObject.FindGameObjectWithTag("GameStart");
 
-            Start_Btu.SetActive(true);
+            //Start_Btu.SetActive(true);
 
             seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
 
@@ -46,6 +50,8 @@ public class RPCManager : MonoBehaviourPunCallbacks
         }
         else
         {
+            Start_Btu.SetActive(false);
+
             Invoke("Room_C", 0.5f);
         }
     }
