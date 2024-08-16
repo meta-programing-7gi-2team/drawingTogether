@@ -56,7 +56,6 @@ public class RPCManager : MonoBehaviourPunCallbacks
                 if (seat.transform.childCount == 4)
                 {
                     gameObject.transform.SetParent(seat.transform);
-                    Debug.Log($"Player assigned to {seat.name}");
 
                     TargetObject = seat.name;
                     break;
@@ -138,19 +137,12 @@ public class RPCManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void Room(string NickName, string image, string targetObjectName)
     {
-        Debug.Log(NickName);
-        Debug.Log("Target Object Name: " + targetObjectName);
-
-        // targetObjectName을 사용하여 오브젝트 찾기
         GameObject targetObject = GameObject.Find(targetObjectName);
 
         if (targetObject != null)
         {
-            // 부모-자식 관계 설정 또는 다른 로직 수행
             gameObject.transform.SetParent(targetObject.transform);
-            Debug.Log($"Player assigned to {targetObject.name}");
 
-            // UI 설정
             Text playerNameText = targetObject.transform.GetChild(0).GetComponent<Text>();
             Image playerImage = targetObject.transform.GetChild(1).GetComponent<Image>();
             Sprite playerSprite = Resources.Load<Sprite>($"Player_Image/{image}");
@@ -160,10 +152,6 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
             playerNameText.text = NickName;
             playerImage.sprite = playerSprite;
-        }
-        else
-        {
-            Debug.LogError($"Target object with name {targetObjectName} not found.");
         }
     }
 
