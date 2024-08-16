@@ -72,7 +72,7 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
         string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
 
-        photonView.RPC("Room", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.NickName, userImage);
+        photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, userImage);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -113,6 +113,8 @@ public class RPCManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void Room(string NickName, string image)
     {
+        Debug.Log(NickName);
+
         foreach (GameObject seat in seatObjects)
         {
             if (seat.transform.childCount == 4)
