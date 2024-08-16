@@ -54,14 +54,20 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
     {
         if(Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
+            Debug.Log(photonView.ViewID);
+            Debug.Log(photonView.IsMine);
             if (photonView.IsMine) return;
 
             if(!NetworkManager.instance.Game_Check)
             {
+                Debug.Log(photonView.ViewID);
+                Debug.Log(photonView.IsMine);
                 Send();
             }
             else
             {
+                Debug.Log(photonView.ViewID);
+                Debug.Log(photonView.IsMine);
                 Bubble_Send();
             }
         }
