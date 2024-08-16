@@ -57,6 +57,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         RoomName = clickedButton.transform.GetChild(0).GetComponent<Text>().text;
         SceneManager.sceneLoaded += OnSceneLoaded;
         SceneManager.LoadScene("IngameUI");
+        AudioManager.instance.PlayBGM(AudioManager.instance.InGame_BGM);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

@@ -54,6 +54,7 @@ public class LoginControl : MonoBehaviourPunCallbacks
         SceneManager.LoadScene("MainScene");
         PhotonNetwork.NickName = UserInfo_Manager.instance.info.User_Name;
         PhotonNetwork.JoinLobby();
+        AudioManager.instance.PlayBGM(AudioManager.instance.Lobby_BGM);
     }
 
     public void Open_SignUp()
