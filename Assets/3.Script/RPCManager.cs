@@ -154,5 +154,4 @@ public class RPCManager : MonoBehaviourPunCallbacks
             playerImage.sprite = playerSprite;
         }
     }
-
 }
