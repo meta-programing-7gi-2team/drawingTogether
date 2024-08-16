@@ -24,6 +24,7 @@ public class OptionExitControl : MonoBehaviour
         SceneManager.LoadScene("MainScene");
         AudioManager.instance.PlayBGM(AudioManager.instance.Lobby_BGM);
     }
+
     public void Game_Exit()
     {
         NetworkManager.instance.GameExit();

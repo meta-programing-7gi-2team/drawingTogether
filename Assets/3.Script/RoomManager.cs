@@ -18,14 +18,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
     [SerializeField] private int Player_Count = 0;
     List<RoomInfo> myList = new List<RoomInfo>();
 
-    public override void OnJoinedLobby() // 로비 접속 완료되면 반환되는 메소드
+    #region 방관련
+    public override void OnEnable()
     {
         Sprite playerSprite = Resources.Load<Sprite>($"Player_Image/{UserInfo_Manager.instance.info.User_Image}");
         UserImage.sprite = playerSprite;
         Nickname.text = ($"{PhotonNetwork.NickName}");
     }
-
-    #region 방관련
     public void Player_Count_T(int Player)
     {
         PlayerPrefs.SetInt("Player_Count", Player);
