@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ButtonScale : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ButtonEventHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     private RectTransform rect;
     private Vector3 pointScale = new Vector3(1.2f, 1.2f, 1f);
@@ -22,5 +22,10 @@ public class ButtonScale : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerExit(PointerEventData eventData)
     {
         rect.localScale = Vector3.one;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        AudioManager.instance.PlaySFX(AudioManager.instance.Click_SFX);
     }
 }
