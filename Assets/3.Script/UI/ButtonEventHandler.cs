@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class ButtonEventHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     private RectTransform rect;
-    private Vector3 pointScale = new Vector3(1.2f, 1.2f, 1f);
+    private Vector3 pointScale = new Vector3(1.1f, 1.1f, 1f);
 
     private void Start()
     {
