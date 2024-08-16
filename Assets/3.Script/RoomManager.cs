@@ -19,12 +19,20 @@ public class RoomManager : MonoBehaviourPunCallbacks
     List<RoomInfo> myList = new List<RoomInfo>();
 
     #region ¹æ°ü·Ã
-    public override void OnEnable()
+    public override void OnJoinedLobby()
     {
         Sprite playerSprite = Resources.Load<Sprite>($"Player_Image/{UserInfo_Manager.instance.info.User_Image}");
         UserImage.sprite = playerSprite;
         Nickname.text = ($"{PhotonNetwork.NickName}");
     }
+
+    public override void OnLeftRoom()
+    {
+        Sprite playerSprite = Resources.Load<Sprite>($"Player_Image/{UserInfo_Manager.instance.info.User_Image}");
+        UserImage.sprite = playerSprite;
+        Nickname.text = ($"{PhotonNetwork.NickName}");
+    }
+
     public void Player_Count_T(int Player)
     {
         PlayerPrefs.SetInt("Player_Count", Player);

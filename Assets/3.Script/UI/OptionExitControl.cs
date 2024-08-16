@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
@@ -20,9 +21,8 @@ public class OptionExitControl : MonoBehaviour
 
     public void Room_Exit()
     {
-        PhotonNetwork.LeaveRoom();
         SceneManager.LoadScene("MainScene");
-        AudioManager.instance.PlayBGM(AudioManager.instance.Lobby_BGM);
+        PhotonNetwork.LeaveRoom();
     }
 
     public void Game_Exit()
