@@ -36,9 +36,9 @@ public class Drawable : MonoBehaviour
     private Color32[] cur_colors;
     private bool mouse_was_previously_held_down = false;
     private bool no_drawing_on_current_drag = false;
+    private bool mouse_down = false;
 
-    [SerializeField]private Texture2D texture;
-    private CommandManager commandManager;
+    private PlayerInput playerInput;
 
     // 기본 브러쉬
     public void PenBrush(Vector2 world_point)
@@ -73,6 +73,7 @@ public class Drawable : MonoBehaviour
 
         if (mouse_held_down)
         {
+            mouse_down = true;
             // 마우스 좌표를 월드 좌표로 반환
             Vector2 mouse_world_position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -104,33 +105,15 @@ public class Drawable : MonoBehaviour
             previous_drag_position = Vector2.zero;
             no_drawing_on_current_drag = false;
 
-            Texture2D newTexture = CloneTexture(drawable_texture);
-            ICommand changeTextCommand = new ChangeDrawableCommand(texture, newTexture);
-            texture = newTexture;
-            commandManager.ExecuteCommand(changeTextCommand);
+            //Texture2D newTexture = CloneTexture(drawable_texture);
+            if(mouse_down)
+            {
+                mouse_down = false;
+                playerInput.TextureChanged(drawable_texture);
+            }
         }
         mouse_was_previously_held_down = mouse_held_down;
     }
-    //PlayerInput
-    public void OnUndo()
-    {
-        commandManager.UndoCommand();
-    }
-
-    //Texture2D 클론
-    public Texture2D CloneTexture(Texture2D source)
-    {
-        // 새로운 Texture2D 생성 (원본 텍스처의 크기, 포맷, MipMap 여부 사용)
-        Texture2D clonedTexture = new Texture2D(source.width, source.height, source.format, source.mipmapCount > 1);
-
-        // 원본 텍스처의 모든 픽셀 데이터를 가져와서 복제본에 적용
-        Color[] pixels = source.GetPixels();
-        clonedTexture.SetPixels(pixels);
-        clonedTexture.Apply(); // 적용하여 텍스처에 변경사항 반영
-
-        return clonedTexture;
-    }
-
     // 시작점부터 끝점까지 색상 표시
     public void colorBetween(Vector2 start_point, Vector2 end_point, int width, Color color)
     {
@@ -261,7 +244,7 @@ public class Drawable : MonoBehaviour
     {
         drawable_texture.SetPixels(clean_colors_array);
         drawable_texture.Apply();
-        commandManager.ClearCommands();
+        playerInput.ClearStack();
     }
 
     void Awake()
@@ -278,10 +261,12 @@ public class Drawable : MonoBehaviour
         for (int x = 0; x < clean_colors_array.Length; x++)
             clean_colors_array[x] = Reset_color;
 
-        commandManager = gameObject.AddComponent<CommandManager>();
+        playerInput = FindObjectOfType<PlayerInput>();
 
         // 캔버스를 초기 상태로 리셋
         if (Reset_Canvas_On_Play)
             ResetCanvas();
+
+        playerInput.TextureChanged(drawable_texture);
     }
 }
