@@ -51,10 +51,6 @@ public class RPCManager : MonoBehaviourPunCallbacks
                 seatObjects[i].SetActive(false);
             }
 
-            seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
-
-            string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
-
             foreach (GameObject seat in seatObjects)
             {
                 if (seat.transform.childCount == 4)
@@ -66,6 +62,10 @@ public class RPCManager : MonoBehaviourPunCallbacks
                     break;
                 }
             }
+
+            seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
+
+            string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
 
             photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, userImage, TargetObject);
         }
@@ -83,6 +83,18 @@ public class RPCManager : MonoBehaviourPunCallbacks
     {
         seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
 
+        foreach (GameObject seat in seatObjects)
+        {
+            if (seat.transform.childCount == 4)
+            {
+                gameObject.transform.SetParent(seat.transform);
+                Debug.Log($"Player assigned to {seat.name}");
+
+                TargetObject = seat.name;
+                break;
+            }
+        }
+
         string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
 
         photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, userImage, TargetObject);
@@ -90,8 +102,8 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);       
-    
+        string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
+
         photonView.RPC("Room", newPlayer, PhotonNetwork.LocalPlayer.NickName, userImage, TargetObject);
     }
 
@@ -124,21 +136,35 @@ public class RPCManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void Room(string NickName, string image, string TargetObject)
+    public void Room(string NickName, string image, string targetObjectName)
     {
         Debug.Log(NickName);
+        Debug.Log("Target Object Name: " + targetObjectName);
 
-        GameObject foundObject = GameObject.Find(TargetObject);
+        // targetObjectName을 사용하여 오브젝트 찾기
+        GameObject targetObject = GameObject.Find(targetObjectName);
 
-        Text playerNameText = foundObject.transform.GetChild(0).GetComponent<Text>();
-        Image playerImage = foundObject.transform.GetChild(1).GetComponent<Image>();
-        Sprite playerSprite = Resources.Load<Sprite>($"Player_Image/{image}");
-        Color color = playerImage.color;
-        color.a = 1;
-        playerImage.color = color;
+        if (targetObject != null)
+        {
+            // 부모-자식 관계 설정 또는 다른 로직 수행
+            gameObject.transform.SetParent(targetObject.transform);
+            Debug.Log($"Player assigned to {targetObject.name}");
 
-        playerNameText.text = NickName;
-        playerImage.sprite = playerSprite;
+            // UI 설정
+            Text playerNameText = targetObject.transform.GetChild(0).GetComponent<Text>();
+            Image playerImage = targetObject.transform.GetChild(1).GetComponent<Image>();
+            Sprite playerSprite = Resources.Load<Sprite>($"Player_Image/{image}");
+            Color color = playerImage.color;
+            color.a = 1;
+            playerImage.color = color;
+
+            playerNameText.text = NickName;
+            playerImage.sprite = playerSprite;
+        }
+        else
+        {
+            Debug.LogError($"Target object with name {targetObjectName} not found.");
+        }
     }
 
 }
