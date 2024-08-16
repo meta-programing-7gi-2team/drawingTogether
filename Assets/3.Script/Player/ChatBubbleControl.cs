@@ -69,18 +69,18 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
 
     public void Send()
     {
-        photonView.RPC("Chat", RpcTarget.All, input_F.text);
+        photonView.RPC("Chat", RpcTarget.Others, input_F.text);
     }
 
     public void Bubble_Send()
     {
-        photonView.RPC("BubbleChat", RpcTarget.All, input_F.text);
+        photonView.RPC("BubbleChat", RpcTarget.Others, input_F.text);
     }
 
     [PunRPC]
     public void Chat(string message)
     {
-        text.text += "\n" + PhotonNetwork.NickName + " : " + message;
+        text.text += "\n" + PhotonNetwork.LocalPlayer.NickName + " : " + message;
         input_F.text = string.Empty;
     }
 
@@ -100,15 +100,4 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
         bubble.DOScale(Vector3.zero, 0.2f);
     }
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            stream.SendNext(word.text);
-        }
-        else
-        {
-            word.text = (string)stream.ReceiveNext();
-        }
-    }
 }
