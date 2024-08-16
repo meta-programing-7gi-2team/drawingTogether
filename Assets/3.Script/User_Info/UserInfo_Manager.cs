@@ -270,7 +270,7 @@ public class UserInfo_Manager : MonoBehaviour
                 return;
             }
 
-            string updateLogoutStatus = $"UPDATE user_info SET LogIn = 0 WHERE User_ID = '{id}'";
+            string updateLogoutStatus = $"UPDATE user_info SET Login = 0 WHERE User_ID = '{id}'";
             MySqlCommand cmd = new MySqlCommand(updateLogoutStatus, connection);
             cmd.ExecuteNonQuery();
 
@@ -339,12 +339,12 @@ public class UserInfo_Manager : MonoBehaviour
                 return false;
             }
 
-            string SQL_Command = "UPDATE User_info SET Image = @image WHERE User_Name = @name";
+            string SQL_Command = "UPDATE user_info SET Image = @image WHERE User_Name = @name";
             MySqlCommand cmd = new MySqlCommand(SQL_Command, connection);
             cmd.Parameters.AddWithValue("@name", name);
             cmd.Parameters.AddWithValue("@Image", image);
 
-            info = new User_info(id, password, name, image);
+            info.User_Image = image;
 
             int NonQuery = cmd.ExecuteNonQuery();
 
