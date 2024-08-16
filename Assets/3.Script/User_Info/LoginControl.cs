@@ -20,6 +20,17 @@ public class LoginControl : MonoBehaviourPunCallbacks
     [SerializeField] private TextMeshProUGUI S_Log;
     [SerializeField] private GameObject SighUp_UI;
 
+    private void Update()
+    {
+        if (s_pw_input.isFocused || l_pw_input.isFocused)
+        {
+            Input.imeCompositionMode = IMECompositionMode.Off;
+        }
+        else if(s_pw_input.isFocused || l_pw_input.isFocused)
+        {
+            Input.imeCompositionMode = IMECompositionMode.Auto;
+        }
+    }
 
     public void Login_Btn()
     {
