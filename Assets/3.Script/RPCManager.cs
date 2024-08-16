@@ -11,6 +11,7 @@ public class RPCManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject[] seatObjects;
     [SerializeField] private GameObject Start_Btu;
+    private Transform parentTransform;
     private List<Queue<Player>> Game_Num = new List<Queue<Player>>();
 
     private void Start()
@@ -54,7 +55,7 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
             string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
 
-            photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, userImage);
+            photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, userImage, parentTransform);
         }
         else
         {
@@ -72,14 +73,14 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
         string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
 
-        photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, userImage);
+        photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, userImage, parentTransform);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);       
     
-        photonView.RPC("Room", newPlayer, PhotonNetwork.LocalPlayer.NickName, userImage);
+        photonView.RPC("Room", newPlayer, PhotonNetwork.LocalPlayer.NickName, userImage, parentTransform);
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -111,7 +112,7 @@ public class RPCManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void Room(string NickName, string image)
+    public void Room(string NickName, string image, Transform parentTransform)
     {
         Debug.Log(NickName);
 
@@ -122,7 +123,7 @@ public class RPCManager : MonoBehaviourPunCallbacks
                 gameObject.transform.SetParent(seat.transform);
                 Debug.Log($"Player assigned to {seat.name}");
 
-                Transform parentTransform = gameObject.transform.parent;
+                parentTransform = gameObject.transform.parent;
 
                 Text playerNameText = parentTransform.transform.GetChild(0).GetComponent<Text>();
                 Image playerImage = parentTransform.transform.GetChild(1).GetComponent<Image>();
@@ -137,4 +138,5 @@ public class RPCManager : MonoBehaviourPunCallbacks
             }
         }
     }
+
 }
