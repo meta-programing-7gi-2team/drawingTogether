@@ -239,7 +239,7 @@ public class UserInfo_Manager : MonoBehaviour
         }
     }
 
-    private void OnApplicationQuit()
+    public void OnApplicationQuit()
     {
         if (info != null && info.LogIn)
         {
@@ -247,7 +247,7 @@ public class UserInfo_Manager : MonoBehaviour
         }
     }
 
-    private void OnApplicationPause(bool pauseStatus)
+    public void OnApplicationPause(bool pauseStatus)
     {
         if (pauseStatus)
         {

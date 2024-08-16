@@ -1,25 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
-    private static AudioManager instance = null;
+    public static AudioManager instance = null;
 
     [Header("Audio Scurce")]
     [SerializeField] private AudioSource BGMSource;
     [SerializeField] private AudioSource SFXSource;
 
-    [Header("Audio Clip")]
-    public AudioClip Lobby_Background;
-    public AudioClip InGame_Background;
+    [Header("Audio Clip Bgm")]
+    public AudioClip Login_BGM;
+    public AudioClip Lobby_BGM;
+    public AudioClip InGame_BGM;
+
+    [Header("Audio Clip Sfx")]
     public AudioClip StartGame_SFX;
     public AudioClip Timer_SFX;
-    public AudioClip BtnClick_SFX;
+    public AudioClip Click_SFX;
+    public AudioClip CursorOn_SFX;
     public AudioClip Clear_SFX;
     public AudioClip CorrectAnswer_SFX;
     public AudioClip ResultWin_SFX;
     public AudioClip ResultLose_SFX;
+
+    [Header("Audio Setting")]
+    [SerializeField] private AudioMixer audiomixer;
+    [SerializeField] private Slider bgmSlider;
+    [SerializeField] private Slider sfxSlider;
+
 
     private void Awake()
     {
@@ -37,12 +49,21 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        BGMSource.clip = Lobby_Background;
+        BGMSource.clip = Login_BGM;
         BGMSource.Play();
     }
 
     public void PlaySFX(AudioClip clip)
     {
         SFXSource.PlayOneShot(clip);
+    }
+
+    public void SetVolumeBgm()
+    {
+        BGMSource.volume = bgmSlider.value;
+    }
+    public void SetVolumeSfx()
+    {
+        SFXSource.volume = sfxSlider.value;
     }
 }
