@@ -13,6 +13,25 @@ public class RPCManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject Start_Btu;
     private List<Queue<Player>> Game_Num = new List<Queue<Player>>();
 
+    private void Start()
+    {
+        seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
+
+        int RoomMax = PhotonNetwork.CurrentRoom.MaxPlayers;
+
+        for (int i = 0; i < RoomMax; i++)
+        {
+            seatObjects[i].SetActive(true);
+        }
+
+        for (int i = RoomMax; i < seatObjects.Length; i++)
+        {
+            seatObjects[i].SetActive(false);
+        }
+
+        seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
+    }
+
     public void RoomJoinRpc()
     {
         if(PhotonNetwork.IsMasterClient)
@@ -35,30 +54,14 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
             string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
 
-            photonView.RPC("Room", PhotonNetwork.LocalPlayer, PhotonNetwork.LocalPlayer.NickName, userImage);
+            photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, userImage);
         }
         else
         {
-            seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
-
-            int RoomMax = PhotonNetwork.CurrentRoom.MaxPlayers;
-
-            for (int i = 0; i < RoomMax; i++)
-            {
-                seatObjects[i].SetActive(true);
-            }
-
-            for (int i = RoomMax; i < seatObjects.Length; i++)
-            {
-                seatObjects[i].SetActive(false);
-            }
-
-            seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
-
             Invoke("Room_C", 0.5f);
-
+            
             Start_Btu = GameObject.FindGameObjectWithTag("GameStart");
-
+            
             Start_Btu.SetActive(false);
         }
     }
@@ -69,15 +72,13 @@ public class RPCManager : MonoBehaviourPunCallbacks
 
         string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
 
-        photonView.RPC("Room", PhotonNetwork.LocalPlayer, PhotonNetwork.LocalPlayer.NickName, userImage);
-
-        photonView.RPC("Room", RpcTarget.Others, PhotonNetwork.LocalPlayer.NickName, userImage);
+        photonView.RPC("Room", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.NickName, userImage);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);       
-
+    
         photonView.RPC("Room", newPlayer, PhotonNetwork.LocalPlayer.NickName, userImage);
     }
 
