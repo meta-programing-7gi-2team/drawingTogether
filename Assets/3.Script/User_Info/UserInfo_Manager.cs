@@ -91,14 +91,6 @@ public class UserInfo_Manager : MonoBehaviour
     void Start()
     {
         LoadAllUsersFromDatabase();
-
-        foreach (var user in allUsers)
-        {
-            if (!user.Value.LogIn)
-            {
-                Debug.Log($"로그인되지 않은 계정: {user.Key}");
-            }
-        }
     }
 
     private string JsonCreate()
