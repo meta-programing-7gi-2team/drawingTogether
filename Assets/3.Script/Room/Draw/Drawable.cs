@@ -22,7 +22,7 @@ public class Drawable : MonoBehaviour
     // Awake에서 기본 기능 설정
     public Brush_Function current_brush;
 
-    public LayerMask Drawing_Layers;
+    public LayerMask Drawing_Layers; //그릴 레이어
 
     public bool Reset_Canvas_On_Play = true;
     public Color Reset_color = new Color(0, 0, 0, 0);  // 기본 리셋은 투명

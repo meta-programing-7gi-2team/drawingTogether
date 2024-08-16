@@ -6,7 +6,7 @@ using ExitGames.Client.Photon;
 
 public class ImageReceiver : MonoBehaviour, IOnEventCallback
 {
-    [SerializeField] private Image imageUI;
+    [SerializeField] private Image image;
     public void OnEnable()
     {
         PhotonNetwork.AddCallbackTarget(this);
@@ -27,14 +27,14 @@ public class ImageReceiver : MonoBehaviour, IOnEventCallback
             receivedTexture.LoadImage(imageBytes); // 바이트 배열을 Texture2D로 변환
 
             // 받은 텍스처를 필요한 곳에 사용
-            if (receivedTexture != null && imageUI != null)
+            if (receivedTexture != null && image != null)
             {
                 // Texture2D를 Sprite로 변환
                 Rect rect = new Rect(0, 0, receivedTexture.width, receivedTexture.height);
                 Sprite sprite = Sprite.Create(receivedTexture, rect, new Vector2(0.5f, 0.5f));
 
                 // UI Image 컴포넌트에 Sprite 할당
-                imageUI.sprite = sprite;
+                image.sprite = sprite;
             }
         }
     }
