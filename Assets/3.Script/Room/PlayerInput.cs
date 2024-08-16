@@ -2,10 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using TMPro;
 
-public class ScreenShot : MonoBehaviour
+public class PlayerInput : MonoBehaviour
 {
+    [SerializeField] private TMP_InputField[] inputFields; // 순서대로 넣은 InputField들
+
+    private int currentInputFieldIndex = 0;
+
     // 스크린샷을 저장하는 메서드
     public void OnCapture()
     {
@@ -26,5 +32,14 @@ public class ScreenShot : MonoBehaviour
         ScreenCapture.CaptureScreenshot(filePath);
 
         Debug.Log("Screenshot saved to: " + filePath);
+    }
+    public void OnNextInputField()
+    {
+        // 현재 InputField 인덱스 계산
+        currentInputFieldIndex = (currentInputFieldIndex + 1) % inputFields.Length;
+
+        // 다음 InputField로 포커스 이동
+        EventSystem.current.SetSelectedGameObject(inputFields[currentInputFieldIndex].gameObject);
+        inputFields[currentInputFieldIndex].ActivateInputField();
     }
 }
