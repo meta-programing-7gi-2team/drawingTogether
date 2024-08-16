@@ -69,12 +69,12 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
 
     public void Send()
     {
-        photonView.RPC("Chat", RpcTarget.Others, input_F.text);
+        photonView.RPC("Chat", RpcTarget.All, input_F.text);
     }
 
     public void Bubble_Send()
     {
-        photonView.RPC("BubbleChat", RpcTarget.Others, input_F.text);
+        photonView.RPC("BubbleChat", RpcTarget.All, input_F.text);
     }
 
     [PunRPC]
