@@ -37,8 +37,19 @@ public class RPCManager : MonoBehaviourPunCallbacks
     {
         if(PhotonNetwork.IsMasterClient)
         {
+            seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
 
-            //Start_Btu.SetActive(true);
+            int RoomMax = PhotonNetwork.CurrentRoom.MaxPlayers;
+
+            for (int i = 0; i < RoomMax; i++)
+            {
+                seatObjects[i].SetActive(true);
+            }
+
+            for (int i = RoomMax; i < seatObjects.Length; i++)
+            {
+                seatObjects[i].SetActive(false);
+            }
 
             seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
 
@@ -50,6 +61,22 @@ public class RPCManager : MonoBehaviourPunCallbacks
         {
             Invoke("Room_C", 0.5f);
 
+            seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
+
+            int RoomMax = PhotonNetwork.CurrentRoom.MaxPlayers;
+
+            for (int i = 0; i < RoomMax; i++)
+            {
+                seatObjects[i].SetActive(true);
+            }
+
+            for (int i = RoomMax; i < seatObjects.Length; i++)
+            {
+                seatObjects[i].SetActive(false);
+            }
+
+            seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
+
             Start_Btu = GameObject.FindGameObjectWithTag("GameStart");
 
             Start_Btu.SetActive(false);
@@ -60,13 +87,13 @@ public class RPCManager : MonoBehaviourPunCallbacks
     {
         string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);       
 
-        photonView.RPC("Room", RpcTarget.Others, PhotonNetwork.LocalPlayer.NickName, userImage);
+        photonView.RPC("Room", newPlayer, PhotonNetwork.LocalPlayer.NickName, userImage);
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         Debug.Log(otherPlayer);
-        photonView.RPC("LeaveRoom", RpcTarget.All, otherPlayer.NickName);
+        photonView.RPC("LeaveRoom", RpcTarget.Others, otherPlayer.NickName);
     }
 
     [PunRPC]
