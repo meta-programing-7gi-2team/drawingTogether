@@ -27,7 +27,7 @@ public class RPCManager : MonoBehaviourPunCallbacks
             seatObjects[i].SetActive(false);
         }
 
-        photonView.RPC("Parentplayer", RpcTarget.All);
+        photonView.RPC("Parentplayer", RpcTarget.AllBuffered);
 
         userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
 
