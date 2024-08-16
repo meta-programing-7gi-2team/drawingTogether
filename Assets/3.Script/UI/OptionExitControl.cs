@@ -28,4 +28,12 @@ public class OptionExitControl : MonoBehaviour
     {
         NetworkManager.instance.GameExit();
     }
+    //public void Lobby_Exit()
+    //{
+    //    PhotonNetwork.LeaveLobby(); // 로비나가기
+    //    PhotonNetwork.Disconnect(); // 서버연결종료
+    //    UserInfo_Manager.instance.Logout(UserInfo_Manager.instance.info.User_ID);
+    //    SceneManager.LoadScene("LoginScene");
+    //    AudioManager.instance.PlayBGM(AudioManager.instance.Login_BGM);
+    //}
 }

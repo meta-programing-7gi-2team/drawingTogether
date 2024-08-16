@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using DG.Tweening;
 public class ChatBubbleControl : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class ChatBubbleControl : MonoBehaviour
         bubble.DOScale(Vector3.one, 0.2f);
 
         Invoke("Close", 1.5f);
+
+        EventSystem.current.SetSelectedGameObject(input.gameObject, null);
+        input.OnPointerClick(new PointerEventData(EventSystem.current));
     }
 
     public void Close()
