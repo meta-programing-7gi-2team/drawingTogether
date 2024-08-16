@@ -10,6 +10,7 @@ using Photon.Realtime;
 public class RPCManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject[] seatObjects;
+    private List<Queue<Player>> Game_Num = new List<Queue<Player>>();
 
     private void Start()
     {
@@ -56,23 +57,30 @@ public class RPCManager : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         Debug.Log(otherPlayer);
-        photonView.RPC("LeftRoom", RpcTarget.All, otherPlayer.ActorNumber);
+        photonView.RPC("LeaveRoom", RpcTarget.All, otherPlayer.NickName);
     }
 
     [PunRPC]
-    public void LeftRoom(int otherPlayer)
+    public void LeaveRoom(string NickName)
     {
-        int playerIndex = otherPlayer - 1;
+        foreach (GameObject seat in seatObjects)
+        {
+            Text playerNameText = seat.transform.GetChild(0).GetComponent<Text>();
 
-        GameObject LeftPlayer = seatObjects[playerIndex];
+            if (playerNameText.text == NickName)
+            {
+                playerNameText.text = string.Empty;
 
-        Text player_t = LeftPlayer.transform.GetChild(0).GetComponent<Text>();
-        Image player_m = LeftPlayer.transform.GetChild(1).GetComponent<Image>();
-        Color color = player_m.color;
-        color.a = 0;
-        player_m.color = color;
+                Image playerImage = seat.transform.GetChild(1).GetComponent<Image>();
+                playerImage.sprite = null;
+                Color color = playerImage.color;
+                color.a = 0;
+                playerImage.color = color;
 
-        player_t.text = string.Empty;
+                Debug.Log($"{NickName} has left {seat.name}");
+                break;
+            }
+        }
     }
 
     [PunRPC]
