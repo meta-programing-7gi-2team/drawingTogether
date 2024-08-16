@@ -18,23 +18,7 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            GameObject inputs = GameObject.FindGameObjectWithTag("Input");
-            GameObject TMP = GameObject.FindGameObjectWithTag("TMPChat");
-            GameObject parentObject = gameObject.transform.parent.gameObject;
-
-            Debug.Log(parentObject);
-
-            text = TMP.GetComponent<TMP_Text>();
-            input_F = inputs.GetComponent<InputField>();
-            word = parentObject.transform.GetChild(3).transform.GetChild(0).GetComponent<Text>();
-            bubble = parentObject.transform.GetChild(3).GetComponent<Transform>();
-        }
-        else
-        {
-            Invoke("Test", 0.8f);
-        }
+        Invoke("Test", 0.8f);
     }
 
     private void Test()
@@ -76,7 +60,7 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
 
     public void Send()
     {
-        photonView.RPC("Chat", RpcTarget.All, input_F.text);
+        photonView.RPC("Chat", RpcTarget.All, PhotonNetwork.LocalPlayer, input_F.text);
 
         EventSystem.current.SetSelectedGameObject(input_F.gameObject, null);
         input_F.OnPointerClick(new PointerEventData(EventSystem.current));
@@ -91,9 +75,9 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void Chat(string message)
+    public void Chat(Player player, string message)
     {
-        text.text += "\n" + PhotonNetwork.LocalPlayer.NickName + " : " + message;
+        text.text += "\n" + player.NickName + " : " + message;
         input_F.text = string.Empty;
     }
 
