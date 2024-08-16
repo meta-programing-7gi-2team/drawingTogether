@@ -70,10 +70,26 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
         input_F.OnPointerClick(new PointerEventData(EventSystem.current));
     }
 
+    private void RemoveExtraLines()
+    {
+        if (text.textInfo.lineCount > 18)
+        {
+            // 텍스트를 줄 단위로 나눔
+            string[] lines = text.text.Split('\n');
+
+            // 첫 번째 줄을 제거하고 남은 줄을 다시 조합
+            string newText = string.Join("\n", lines, 1, lines.Length - 1);
+
+            // 텍스트 업데이트
+            text.text = newText;
+        }
+    }
+
     [PunRPC]
     public void Chat(Player player, string message)
     {
         text.text += "\n" + player.NickName + " : " + message;
+        RemoveExtraLines();
     }
 
     [PunRPC]
