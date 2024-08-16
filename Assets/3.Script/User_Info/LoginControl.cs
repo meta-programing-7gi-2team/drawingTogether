@@ -60,6 +60,7 @@ public class LoginControl : MonoBehaviourPunCallbacks
     {
         L_Log.text = string.Empty;
         SighUp_UI.SetActive(true);
+        AudioManager.instance.PlaySFX(AudioManager.instance.Click_SFX);
     }
 
     public void SighUp_btn()

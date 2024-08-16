@@ -79,6 +79,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.LeaveLobby(); // 로비나가기
         PhotonNetwork.Disconnect(); // 서버연결종료
+        UserInfo_Manager.instance.OnApplicationQuit();
+    #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+    #else
+        Application.Quit();
+    #endif
     }
 
     public override void OnDisconnected(DisconnectCause cause)
