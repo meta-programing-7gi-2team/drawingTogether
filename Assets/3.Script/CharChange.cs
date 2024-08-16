@@ -13,6 +13,7 @@ public class CharChange : MonoBehaviour
     {
         gameObject.SetActive(true);
         Setting_Img.sprite = Resources.Load<Sprite>($"Player_Image/{UserInfo_Manager.instance.info.User_Image}");
+        Image_Num = UserInfo_Manager.instance.info.User_Image;
     }
 
     public void Image_SetBtu(string name)
