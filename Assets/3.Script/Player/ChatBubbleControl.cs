@@ -39,20 +39,14 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
     {
         if(Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
-            Debug.Log(photonView.ViewID);
-            Debug.Log(photonView.IsMine);
             if (!photonView.IsMine) return;
 
             if(!NetworkManager.instance.Game_Check)
             {
-                Debug.Log(photonView.ViewID);
-                Debug.Log(photonView.IsMine);
                 Send();
             }
             else
             {
-                Debug.Log(photonView.ViewID);
-                Debug.Log(photonView.IsMine);
                 Bubble_Send();
             }
         }
@@ -61,6 +55,7 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
     public void Send()
     {
         photonView.RPC("Chat", RpcTarget.All, PhotonNetwork.LocalPlayer, input_F.text);
+        input_F.text = string.Empty;
 
         EventSystem.current.SetSelectedGameObject(input_F.gameObject, null);
         input_F.OnPointerClick(new PointerEventData(EventSystem.current));
@@ -69,6 +64,7 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
     public void Bubble_Send()
     {
         photonView.RPC("BubbleChat", RpcTarget.All, input_F.text);
+        input_F.text = string.Empty;
 
         EventSystem.current.SetSelectedGameObject(input_F.gameObject, null);
         input_F.OnPointerClick(new PointerEventData(EventSystem.current));
@@ -78,14 +74,12 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
     public void Chat(Player player, string message)
     {
         text.text += "\n" + player.NickName + " : " + message;
-        input_F.text = string.Empty;
     }
 
     [PunRPC]
     public void BubbleChat(string message)
     {
         word.text = message;
-        input_F.text = string.Empty;
 
         bubble.DOScale(Vector3.one, 0.2f);
 
