@@ -1585,7 +1585,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 211527522}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 562515724}
+        m_TargetAssemblyTypeName: OptionExitControl, Assembly-CSharp
+        m_MethodName: Open_Option
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &211527522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3899,6 +3911,7 @@ GameObject:
   - component: {fileID: 523950284}
   - component: {fileID: 523950283}
   - component: {fileID: 523950282}
+  - component: {fileID: 523950285}
   m_Layer: 5
   m_Name: Exit_btn
   m_TagString: Untagged
@@ -3971,8 +3984,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 562515724}
-        m_TargetAssemblyTypeName: Exit, Assembly-CSharp
-        m_MethodName: Exit_Btu
+        m_TargetAssemblyTypeName: OptionExitControl, Assembly-CSharp
+        m_MethodName: Room_Exit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4020,6 +4033,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 523950280}
   m_CullTransparentMesh: 1
+--- !u!114 &523950285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 523950280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62e185233cf195e44ba4f34905a48668, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &536314947
 GameObject:
   m_ObjectHideFlags: 0
@@ -4327,7 +4352,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 562515719}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b716a86de1d372458a1d36e7df42183, type: 3}
+  m_Script: {fileID: 11500000, guid: 7bfa4232978738744adfd7f14f381f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &587469290
@@ -4446,7 +4471,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -50, y: -50}
+  m_AnchoredPosition: {x: -50, y: -57}
   m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &641147047
@@ -5267,7 +5292,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 300, y: -50}
+  m_AnchoredPosition: {x: 300, y: -57}
   m_SizeDelta: {x: 200, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &885044096
@@ -5470,7 +5495,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -100, y: 0}
+  m_AnchoredPosition: {x: -100, y: -7}
   m_SizeDelta: {x: 1000, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &897698510
@@ -5796,7 +5821,6 @@ GameObject:
   m_Component:
   - component: {fileID: 956702027}
   - component: {fileID: 956702029}
-  - component: {fileID: 956702028}
   m_Layer: 5
   m_Name: DrawingTool
   m_TagString: Untagged
@@ -5830,36 +5854,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -432}
   m_SizeDelta: {x: 1220, y: 220}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &956702028
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 956702026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.50980395}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ab01f61b3c6a46c4587ab9734c601f5a, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!222 &956702029
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6920,6 +6914,7 @@ GameObject:
   - component: {fileID: 1149846469}
   - component: {fileID: 1149846468}
   - component: {fileID: 1149846467}
+  - component: {fileID: 1149846470}
   m_Layer: 5
   m_Name: Option_btn
   m_TagString: Untagged
@@ -6990,7 +6985,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1149846468}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 562515724}
+        m_TargetAssemblyTypeName: OptionExitControl, Assembly-CSharp
+        m_MethodName: Open_Option
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1149846468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7029,6 +7036,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1149846465}
   m_CullTransparentMesh: 1
+--- !u!114 &1149846470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1149846465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62e185233cf195e44ba4f34905a48668, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1203477653
 GameObject:
   m_ObjectHideFlags: 0
@@ -7567,6 +7586,7 @@ GameObject:
   - component: {fileID: 1322279712}
   - component: {fileID: 1322279711}
   - component: {fileID: 1322279710}
+  - component: {fileID: 1322279713}
   m_Layer: 5
   m_Name: Start_btn
   m_TagString: Untagged
@@ -7651,15 +7671,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8588236, g: 0.86274517, b: 0.9058824, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.7529412}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 22a3542d798efe749bac1cd00148cc90, type: 3}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 43ddeee028b08d64bb1662ea40de51f9, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -7676,6 +7696,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1322279708}
   m_CullTransparentMesh: 1
+--- !u!114 &1322279713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1322279708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62e185233cf195e44ba4f34905a48668, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1358397082
 GameObject:
   m_ObjectHideFlags: 0
@@ -8506,7 +8538,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 500, y: 0}
+  m_AnchoredPosition: {x: 500, y: -7}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1533792038
@@ -9629,8 +9661,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 562515724}
-        m_TargetAssemblyTypeName: Exit, Assembly-CSharp
-        m_MethodName: Exit_Btu
+        m_TargetAssemblyTypeName: OptionExitControl, Assembly-CSharp
+        m_MethodName: Room_Exit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10548,7 +10580,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1883988564
 RectTransform:
   m_ObjectHideFlags: 0
