@@ -48,8 +48,6 @@ public class PlayerInput : MonoBehaviour
 
     public void OnUndo()
     {
-        if (texture == null)
-            return;
         if(Input.GetMouseButton(0))
         {
             return;
