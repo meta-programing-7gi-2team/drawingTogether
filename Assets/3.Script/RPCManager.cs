@@ -27,9 +27,19 @@ public class RPCManager : MonoBehaviourPunCallbacks
             seatObjects[i].SetActive(false);
         }
 
-        photonView.RPC("Parentplayer", RpcTarget.AllBuffered);
+        foreach (GameObject seat in seatObjects)
+        {
+            if (seat.transform.childCount == 4)
+            {
+                gameObject.transform.SetParent(seat.transform);
+                Debug.Log($"Player assigned to {seat.name}");
+                break;
+            }
+        }
 
         userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
+
+        int Room_C = PhotonNetwork.CurrentRoom.PlayerCount - 1;
 
         photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, userImage);
     }
@@ -91,13 +101,4 @@ public class RPCManager : MonoBehaviourPunCallbacks
         playerImage.sprite = playerSprite;
     }
 
-    [PunRPC]
-    public void Parentplayer()
-    {
-        Debug.Log("けしいけし");
-        
-        int Room_C = PhotonNetwork.CurrentRoom.PlayerCount - 1;
-
-        NetworkManager.instance.player.transform.SetParent(seatObjects[Room_C].transform);
-    }
 }
