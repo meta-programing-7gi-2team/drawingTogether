@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
@@ -9,64 +10,47 @@ using Photon.Realtime;
 public class RPCManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject[] seatObjects;
-    private string userImage;
 
     private void Start()
     {
         seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
 
-        if (PhotonNetwork.IsMasterClient)
+        int RoomMax = PhotonNetwork.CurrentRoom.MaxPlayers;
+
+        for (int i = 0; i < RoomMax; i++)
         {
-            Debug.Log("나는 방장");
+            seatObjects[i].SetActive(true);
+        }
 
-            int RoomMax = PhotonNetwork.CurrentRoom.MaxPlayers;
+        for (int i = RoomMax; i < seatObjects.Length; i++)
+        {
+            seatObjects[i].SetActive(false);
+        }
 
-            for (int i = 0; i < RoomMax; i++)
-            {
-                seatObjects[i].SetActive(true);
-            }
+    }
 
-            for (int i = RoomMax; i < seatObjects.Length; i++)
-            {
-                seatObjects[i].SetActive(false);
-            }
-
+    public void RoomJoinRpc()
+    {
+        if(PhotonNetwork.IsMasterClient)
+        {
             seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
 
-            userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
+            string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
 
-            photonView.RPC("Room", PhotonNetwork.LocalPlayer, PhotonNetwork.LocalPlayer.NickName, userImage);
-
-            photonView.RPC("Room", RpcTarget.OthersBuffered, PhotonNetwork.LocalPlayer.NickName, userImage);
+            photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, userImage);
         }
         else
         {
-            Debug.Log("나는 클라");
-            int RoomMax = PhotonNetwork.CurrentRoom.MaxPlayers;
-
-            for (int i = 0; i < RoomMax; i++)
-            {
-                seatObjects[i].SetActive(true);
-            }
-
-            for (int i = RoomMax; i < seatObjects.Length; i++)
-            {
-                seatObjects[i].SetActive(false);
-            }
-
-            //seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
-            //
-            //userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
-            //
-            //photonView.RPC("Room", PhotonNetwork.LocalPlayer, PhotonNetwork.LocalPlayer.NickName, userImage);
+            Invoke("Room_C", 0.5f);
         }
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        string Player_I = NetworkManager.instance.GetPlayerImage(newPlayer);
-   
-        //photonView.RPC("Room", RpcTarget.Others, newPlayer.NickName, Player_I);
+        string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);       
+
+        photonView.RPC("Room", newPlayer, PhotonNetwork.LocalPlayer.NickName, userImage);
+
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -100,21 +84,30 @@ public class RPCManager : MonoBehaviourPunCallbacks
             {
                 gameObject.transform.SetParent(seat.transform);
                 Debug.Log($"Player assigned to {seat.name}");
-    
+
                 Transform parentTransform = gameObject.transform.parent;
-    
+
                 Text playerNameText = parentTransform.transform.GetChild(0).GetComponent<Text>();
                 Image playerImage = parentTransform.transform.GetChild(1).GetComponent<Image>();
                 Sprite playerSprite = Resources.Load<Sprite>($"Player_Image/{image}");
                 Color color = playerImage.color;
                 color.a = 1;
                 playerImage.color = color;
-    
+
                 playerNameText.text = NickName;
                 playerImage.sprite = playerSprite;
                 break;
             }
-    }
         }
+    }
+
+    public void Room_C()
+    {
+        seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
+
+        string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
+
+        photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, userImage);
+    }
 
 }
