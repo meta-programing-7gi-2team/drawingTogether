@@ -61,6 +61,11 @@ public class LoginControl : MonoBehaviourPunCallbacks
         L_Log.text = string.Empty;
         SighUp_UI.SetActive(true);
         AudioManager.instance.PlaySFX(AudioManager.instance.Click_SFX);
+        l_id_input.text = string.Empty;
+        l_pw_input.text = string.Empty;
+        name_input.text = string.Empty;
+        s_id_input.text = string.Empty;
+        s_pw_input.text = string.Empty;
     }
 
     public void SighUp_btn()
@@ -79,6 +84,11 @@ public class LoginControl : MonoBehaviourPunCallbacks
             User_info info = UserInfo_Manager.instance.info;
             SighUp_UI.SetActive(false);
             S_Log.text = string.Empty;
+            l_id_input.text = string.Empty;
+            l_pw_input.text = string.Empty;
+            name_input.text = string.Empty;
+            s_id_input.text = string.Empty;
+            s_pw_input.text = string.Empty;
         }
         else
         {
