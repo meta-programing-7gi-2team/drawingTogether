@@ -7,80 +7,73 @@ using Photon.Pun;
 public class LoginControl : MonoBehaviourPunCallbacks
 {
     [Header("Login")]
-    public TMP_InputField ID_input;
-    public TMP_InputField Password_input;
-    [SerializeField] private TextMeshProUGUI Log;
-    [SerializeField] private GameObject Login_UI;
-    [SerializeField] private GameObject Loding_UI;
-    [SerializeField] private GameObject Room_Panel;
+    public TMP_InputField l_id_input;
+    public TMP_InputField l_pw_input;
+    [SerializeField] private TextMeshProUGUI L_Log;
+    [SerializeField] private GameObject Loading_UI;
 
-    [Header("Register")]
-    public TMP_InputField NickName_input;
-    public TMP_InputField id_input;
-    public TMP_InputField password_input;
+    [Header("SignUp")]
+    public TMP_InputField name_input;
+    public TMP_InputField s_id_input;
+    public TMP_InputField s_pw_input;
     [SerializeField] private TextMeshProUGUI S_Log;
-    [SerializeField] private GameObject SetUp_UI;
+    [SerializeField] private GameObject SighUp_UI;
 
 
     public void Login_Btn()
     {
-        if (ID_input.text.Equals(string.Empty) || Password_input.text.Equals(string.Empty))
+        if (l_id_input.text.Equals(string.Empty) || l_pw_input.text.Equals(string.Empty))
         {
-            Log.text = "아이디와 비밀번호를 입력하세요.";
+            L_Log.text = "아이디와 비밀번호를 입력하세요.";
             return;
         }
 
-        if (UserInfo_Manager.instance.IsAlreadyLoggedIn(ID_input.text))
+        if (UserInfo_Manager.instance.IsAlreadyLoggedIn(l_id_input.text))
         {
-            Log.text = "이미 로그인 된 계정입니다.";
+            L_Log.text = "이미 로그인 된 계정입니다.";
             return;
         }
 
-        if (UserInfo_Manager.instance.Login(ID_input.text, Password_input.text))
+        if (UserInfo_Manager.instance.Login(l_id_input.text, l_pw_input.text))
         {
             User_info info = UserInfo_Manager.instance.info;
-            Loding_UI.SetActive(true);
-            Log.text = string.Empty;
+            Loading_UI.SetActive(true);
+            L_Log.text = string.Empty;
             PhotonNetwork.ConnectUsingSettings();
             Debug.Log(info.User_ID + " | " + info.User_Password + "로그인 성공!");
         }
         else
         {
-            Log.text = "아이디와 비밀번호를 확인해주세요.";
+            L_Log.text = "아이디와 비밀번호를 확인해주세요.";
         }
     }
 
-    public void Open_RegisterUI()
+    public void Open_SignUp()
     {
-        Log.text = string.Empty;
-        SetUp_UI.SetActive(true);
+        L_Log.text = string.Empty;
+        SighUp_UI.SetActive(true);
     }
 
-    public void Register_Btn()
+    public void SighUp_btn()
     {
 
-        if (NickName_input.text.Equals(string.Empty) || id_input.text.Equals(string.Empty) || password_input.text.Equals(string.Empty))
+        if (name_input.text.Equals(string.Empty) || 
+            s_id_input.text.Equals(string.Empty) ||
+            s_pw_input.text.Equals(string.Empty))
         {
             S_Log.text = "빈칸을 모두 채워주세요";
             return;
         }
 
-        if (UserInfo_Manager.instance.SetUp(id_input.text, password_input.text, NickName_input.text))
+        if (UserInfo_Manager.instance.SignUp(s_id_input.text, s_pw_input.text, name_input.text))
         {
             User_info info = UserInfo_Manager.instance.info;
-            SetUp_UI.SetActive(false);
+            SighUp_UI.SetActive(false);
             S_Log.text = string.Empty;
-            Login_UI.SetActive(true);
         }
         else
         {
             S_Log.text = "아이디가 중복되었습니다. \n다시 입력해주세요.";
         }
-    }
-
-    public override void OnJoinedLobby()
-    {
-        Loding_UI.SetActive(false);
-        Room_Panel.SetActive(true);
     }
 }

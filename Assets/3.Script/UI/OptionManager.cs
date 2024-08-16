@@ -6,6 +6,7 @@ using TMPro;
 
 public class OptionManager : MonoBehaviour
 {
+    [Header("Resolution")]
     public TMP_Dropdown dropdown;
     public RectTransform rect;
     private string[] options = { "1920x1080" , "1680x1050", "1600x900", "1280x1024", "1280x960" };
@@ -33,8 +34,6 @@ public class OptionManager : MonoBehaviour
         string[] splits = options[index].Split('x');
         width = int.Parse(splits[0]);
         height = int.Parse(splits[1]);
-        Debug.Log(width);
-        Debug.Log(height);
     }
     public void Apply()
     {

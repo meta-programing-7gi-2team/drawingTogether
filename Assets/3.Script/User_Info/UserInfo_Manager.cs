@@ -100,7 +100,7 @@ public class UserInfo_Manager : MonoBehaviour
         return serverInfo;
     }
 
-    private bool connection_Check(MySqlConnection con)
+    private bool Connection_Check(MySqlConnection con)
     {
         if (con.State != System.Data.ConnectionState.Open)
         {
@@ -143,7 +143,7 @@ public class UserInfo_Manager : MonoBehaviour
     {
         try
         {
-            if (!connection_Check(connection))
+            if (!Connection_Check(connection))
             {
                 return false;
             }
@@ -201,7 +201,7 @@ public class UserInfo_Manager : MonoBehaviour
 
     public bool IsAlreadyLoggedIn(string id)
     {
-        if (!connection_Check(connection))
+        if (!Connection_Check(connection))
         {
             return false;
         }
@@ -217,7 +217,7 @@ public class UserInfo_Manager : MonoBehaviour
     {
         try
         {
-            if (!connection_Check(connection))
+            if (!Connection_Check(connection))
             {
                 return;
             }
@@ -258,7 +258,7 @@ public class UserInfo_Manager : MonoBehaviour
         }
     }
 
-    public bool SetUp(string id, string password, string name)
+    public bool SignUp(string id, string password, string name)
     {
         try
         {
@@ -286,7 +286,7 @@ public class UserInfo_Manager : MonoBehaviour
     {
         try
         {
-            if (!connection_Check(connection))
+            if (!Connection_Check(connection))
             {
                 return false;
             }
