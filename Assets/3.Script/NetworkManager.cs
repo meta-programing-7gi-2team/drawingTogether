@@ -11,6 +11,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     public static NetworkManager instance = null;
+    public GameObject test;
     public string roomName;
 
     private void Awake()
@@ -31,9 +32,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     #region 서버 접속을 위한용도
     public override void OnJoinedRoom()
     {
-        Debug.Log("Successfully joined room: " + PhotonNetwork.CurrentRoom.Name);
+        test = PhotonNetwork.Instantiate("PhotonN", Vector3.zero, Quaternion.identity);
 
-        PhotonNetwork.Instantiate("PhotonN", Vector3.zero, Quaternion.identity);
+        RPCManager rpc = test.GetComponent<RPCManager>();
+
+        rpc.RoomJoinRpc();
     }
 
     public void SetPlayerImage(string userImage)
