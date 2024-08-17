@@ -8,16 +8,23 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Button Start_Btu;
+    [SerializeField] private GameObject DrawingTool;
+    [SerializeField] private GameObject InGameUI;
+    [SerializeField] private GameObject InputField;
     private Queue<Player> players_Q = new Queue<Player>();
     private Player currentPlayer;
+    private string GameWord = string.Empty;
 
     private void Start()
     {
-       GameObject Btu = GameObject.FindGameObjectWithTag("GameStart");
+        if(PhotonNetwork.IsMasterClient)
+        {
+            GameObject Btu = GameObject.FindGameObjectWithTag("GameStart");
 
-        Start_Btu = Btu.GetComponent<Button>();
+            Start_Btu = Btu.GetComponent<Button>();
 
-        Start_Btu.onClick.AddListener(GameStart);
+            Start_Btu.onClick.AddListener(GameStart);
+        }
     }
 
 
@@ -27,15 +34,16 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            InitializePlayerQueue();
-            StartNextTurn();
+            PlayerQueue();
+
+            StartTurn();
         }
     }
 
-    private void InitializePlayerQueue()
+    private void PlayerQueue()
     {
-        PhotonNetwork.CurrentRoom.IsOpen = false;
-        PhotonNetwork.CurrentRoom.IsVisible = false;
+        PhotonNetwork.CurrentRoom.IsOpen = false; // 방입장 못하게 막는거
+        PhotonNetwork.CurrentRoom.IsVisible = false; // 방 안보이게 하는거
 
         foreach (Player player in PhotonNetwork.PlayerList)
         {
@@ -43,7 +51,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    private void StartNextTurn()
+    [PunRPC]
+    private void StartTurn()
     {
         if (PhotonNetwork.IsMasterClient && players_Q.Count > 0)
         {
@@ -60,14 +69,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void PlayerTurnGame(int actorNumber)
     {
-        // 모든 클라이언트에서 현재 턴인 플레이어를 찾습니다.
-        Player player = PhotonNetwork.CurrentRoom.GetPlayer(actorNumber);
+        Player player = PhotonNetwork.CurrentRoom.GetPlayer(actorNumber); // 현재 누구의 턴인 플레이어를 담아준다.
 
-        if (player != null)
-        {
-            Debug.Log($"It's {player.NickName}'s turn now!");
-            // UI 업데이트 등 필요한 작업을 여기서 수행
-        }
+        // 턴인 플레이어는 팔레트와 그림그리기를 활성화하고 게임단어를 GameWord에 넣고 보이게한다.
+
+        // 턴이 아닌유저는 채팅과 그림을 보는 곳을 활성화 게임단어를 동일하게 GameWord에 담고 안보이게한다음 동일한 단어 입력시 무언가 실행해야한다.
     }
 
     private IEnumerator StartPlayerTurn(float turnDuration)
@@ -80,9 +86,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            // 현재 플레이어를 다시 큐에 넣고 다음 턴을 시작합니다.
-            players_Q.Enqueue(currentPlayer);
-            photonView.RPC("StartNextTurn", RpcTarget.MasterClient); // 다음 턴 시작
+            players_Q.Enqueue(currentPlayer); // 턴이 끝난 현재 플레이어를 다시 Queue에 저장
+
+            photonView.RPC("StartTurn", RpcTarget.MasterClient); // 다음 턴을 시작 마스터 클라만 작동
         }
     }
 
