@@ -87,6 +87,7 @@ MonoBehaviour:
   word: {fileID: 0}
   text: {fileID: 0}
   bubble: {fileID: 0}
+  gameManager: {fileID: 0}
 --- !u!114 &4775257244195399665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,3 +101,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Start_Btu: {fileID: 0}
+  DrawingTool: {fileID: 0}
+  InGameUI: {fileID: 0}
+  InputField: {fileID: 0}

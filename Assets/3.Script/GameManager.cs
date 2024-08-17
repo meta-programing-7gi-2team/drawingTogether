@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -11,22 +12,28 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject DrawingTool;
     [SerializeField] private GameObject InGameUI;
     [SerializeField] private GameObject InputField;
+    public Text gametext { get; private set; }
     private Queue<Player> players_Q = new Queue<Player>();
     private Player currentPlayer;
     private string GameWord = string.Empty;
 
     private void Start()
     {
-        if(PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient)
         {
             GameObject Btu = GameObject.FindGameObjectWithTag("GameStart");
-
             Start_Btu = Btu.GetComponent<Button>();
-
             Start_Btu.onClick.AddListener(GameStart);
         }
-    }
 
+        DrawingTool = Resources.FindObjectsOfTypeAll<GameObject>().FirstOrDefault(obj => obj.CompareTag("DrawingTool"));
+        InGameUI = Resources.FindObjectsOfTypeAll<GameObject>().FirstOrDefault(obj => obj.CompareTag("GameUI"));
+        InputField = Resources.FindObjectsOfTypeAll<GameObject>().FirstOrDefault(obj => obj.CompareTag("Input"));
+        gametext = InGameUI.transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+
+        DrawingTool.SetActive(false);
+        InGameUI.SetActive(false);
+    }
 
     public void GameStart()
     {
@@ -35,6 +42,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             PlayerQueue();
+
+            GameObject Btu = Start_Btu.gameObject;
+            Btu.SetActive(false);
 
             StartTurn();
         }
@@ -54,6 +64,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void StartTurn()
     {
+
         if (PhotonNetwork.IsMasterClient && players_Q.Count > 0)
         {
             currentPlayer = players_Q.Dequeue();
@@ -69,11 +80,26 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void PlayerTurnGame(int actorNumber)
     {
-        Player player = PhotonNetwork.CurrentRoom.GetPlayer(actorNumber); // 현재 누구의 턴인 플레이어를 담아준다.
+        Player player = PhotonNetwork.CurrentRoom.GetPlayer(actorNumber); // 현재 누구의 턴인 플레이어를 담아준다..
 
-        // 턴인 플레이어는 팔레트와 그림그리기를 활성화하고 게임단어를 GameWord에 넣고 보이게한다.
+        NetworkManager.instance.Game_Check = true;
 
-        // 턴이 아닌유저는 채팅과 그림을 보는 곳을 활성화 게임단어를 동일하게 GameWord에 담고 안보이게한다음 동일한 단어 입력시 무언가 실행해야한다.
+        gametext.text = string.Empty;
+
+        if (PhotonNetwork.LocalPlayer.ActorNumber.Equals(actorNumber)) // 두개의 넘버가 동일하면 턴인 플레이어
+        {
+            GameWord = "테스트";
+            gametext.text = GameWord; // 인게임에 보이게해할 텍스트
+            InGameUI.SetActive(true);
+            DrawingTool.SetActive(true); // 팔레트
+            InputField.SetActive(false); // 인풋필드 닫기
+        }
+        else // 동일하지 않으면 현재 그림그리는 턴이 아닌 플레이어들
+        {
+            InGameUI.SetActive(true);
+            DrawingTool.SetActive(false); // 팔레트
+            InputField.SetActive(true); // 인풋필드 닫기
+        }
     }
 
     private IEnumerator StartPlayerTurn(float turnDuration)
@@ -82,7 +108,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         EndTurn();
     }
 
-    private void EndTurn()
+    public void EndTurn()
     {
         if (PhotonNetwork.IsMasterClient)
         {

@@ -86,7 +86,6 @@ public class RPCManager : MonoBehaviourPunCallbacks
             if (seat.transform.childCount == 4)
             {
                 gameObject.transform.SetParent(seat.transform);
-                Debug.Log($"Player assigned to {seat.name}");
 
                 TargetObject = seat.name;
                 break;
@@ -126,8 +125,6 @@ public class RPCManager : MonoBehaviourPunCallbacks
                 Color color = playerImage.color;
                 color.a = 0;
                 playerImage.color = color;
-
-                Debug.Log($"{NickName} has left {seat.name}");
                 break;
             }
         }

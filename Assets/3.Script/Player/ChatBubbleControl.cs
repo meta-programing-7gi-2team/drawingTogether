@@ -15,19 +15,20 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
     public Text word; // 각 플레이어
     public TMP_Text text;
     public Transform bubble; // 각 플레이어
+    [SerializeField] private GameManager gameManager;
 
     private void Start()
     {
-        Invoke("Test", 0.8f);
+        Invoke("Setting", 0.7f);
     }
 
-    private void Test()
+    private void Setting()
     {
+        TryGetComponent(out gameManager);
+
         GameObject inputs = GameObject.FindGameObjectWithTag("Input");
         GameObject TMP = GameObject.FindGameObjectWithTag("TMPChat");
         GameObject parentObject = gameObject.transform.parent.gameObject;
-
-        Debug.Log(parentObject);
 
         text = TMP.GetComponent<TMP_Text>();
         input_F = inputs.GetComponent<InputField>();
@@ -95,6 +96,12 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
     [PunRPC]
     public void BubbleChat(string message)
     {
+        Debug.Log(gameManager.gametext.text);
+        if (gameManager.gametext.text.Equals(message))
+        {
+            Debug.Log("정답입니다."); // 여기에 게임종료부분이 있어야한다.
+        }
+
         word.text = message;
 
         bubble.DOScale(Vector3.one, 0.2f);

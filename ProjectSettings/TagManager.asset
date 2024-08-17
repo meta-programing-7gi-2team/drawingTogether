@@ -9,6 +9,8 @@ TagManager:
   - GameStart
   - Input
   - TMPChat
+  - DrawingTool
+  - GameUI
   layers:
   - Default
   - TransparentFX
