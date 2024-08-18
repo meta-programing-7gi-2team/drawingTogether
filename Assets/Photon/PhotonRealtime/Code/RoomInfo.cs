@@ -69,8 +69,6 @@ namespace Photon.Realtime
 
         /// <summary>Backing field for master client id (actorNumber). defined by server in room props and ev leave.</summary>
         public int masterClientId;
-        /// <summary> Play Time </summary>
-        protected int playTime;
 
         /// <summary>Backing field for property.</summary>
         protected string[] propertiesListedInLobby;

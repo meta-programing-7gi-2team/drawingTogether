@@ -87,6 +87,7 @@ MonoBehaviour:
   word: {fileID: 0}
   text: {fileID: 0}
   bubble: {fileID: 0}
+  point: {fileID: 0}
   gameManager: {fileID: 0}
 --- !u!114 &4775257244195399665
 MonoBehaviour:
@@ -104,3 +105,4 @@ MonoBehaviour:
   DrawingTool: {fileID: 0}
   InGameUI: {fileID: 0}
   InputField: {fileID: 0}
+  pointReceiver: {fileID: 0}

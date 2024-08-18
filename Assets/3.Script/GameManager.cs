@@ -13,15 +13,14 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     [SerializeField] private GameObject DrawingTool;
     [SerializeField] private GameObject InGameUI;
     [SerializeField] private GameObject InputField;
+    [SerializeField] private PointReceiver pointReceiver;
     public Text Gametext { get; private set; }
     public Slider timeSlider { get; private set; }
-    private Queue<Player> players_Q = new Queue<Player>();
     private Player currentPlayer;
+    private Queue<Player> players_Q = new Queue<Player>();
     private string gameWord = string.Empty;
     private GameRoundSetting roundSetting;
     private Coroutine currentCoroutine;
-    public Text point_txt; // 각 플레이어
-    public int point;
 
     private void Start()
     {
@@ -39,18 +38,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         Gametext = InGameUI.transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
         timeSlider = InGameUI.transform.GetChild(0).transform.GetChild(2).GetComponent<Slider>();
         roundSetting = FindObjectOfType<GameRoundSetting>();
+        pointReceiver = FindObjectOfType<PointReceiver>();
 
         DrawingTool.SetActive(false);
         InGameUI.SetActive(false);
-
-        Invoke("Setting", 0.7f);
-    }
-    private void Setting()
-    {
-        point = 0;
-        GameObject parentObject = gameObject.transform.parent.gameObject;
-        point_txt = parentObject.transform.GetChild(2).transform.GetComponent<Text>();
-        point_txt.text = point.ToString();
     }
 
     public void GameStart()
@@ -81,9 +72,11 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     [PunRPC]
     private void StartTurn()
     {
-        if (PhotonNetwork.IsMasterClient && players_Q.Count > 0)
+        if (PhotonNetwork.IsMasterClient && players_Q.Count > 0)// && !pointReceiver.InTrun)
         {
+            pointReceiver.TrunStart();
             currentPlayer = players_Q.Dequeue();
+            players_Q.Enqueue(currentPlayer);
 
             Debug.Log($"{currentPlayer.NickName}님의 턴입니다.");
 
@@ -119,7 +112,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     private IEnumerator StartPlayerTurn()
     {
         float elapsedTime = 0f;
-        float duration = PhotonNetwork.CurrentRoom.PlayTime; ;  // 슬라이더가 100에서 0으로 감소하는 데 걸리는 시간
+        float duration = (int)PhotonNetwork.CurrentRoom.CustomProperties["PlayTime"];  // 슬라이더가 100에서 0으로 감소하는 데 걸리는 시간
         float curValue = 0f;
 
         while (elapsedTime < duration)
@@ -132,7 +125,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
         curValue = 0;  // 최종적으로 슬라이더를 0으로 설정
         SendTimeSliderValue(curValue);
-
+        pointReceiver.TrunReset();
         EndTurn();
     }
 
@@ -158,43 +151,44 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     [PunRPC]
     public void EndTurn()
     {
-        if (!photonView.IsMine) return;
         if (currentCoroutine != null)
         {
             StopCoroutine(currentCoroutine);
+            currentCoroutine = null;
         }
-        players_Q.Enqueue(currentPlayer); // 턴이 끝난 현재 플레이어를 다시 Queue에 저장
         photonView.RPC("StartTurn", RpcTarget.MasterClient); // 다음 턴을 시작 마스터 클라만 작동
     }
 
     public void OnEvent(EventData photonEvent)
     {
+        // 이벤트 코드가 5인 경우에만 처리
+        if (photonEvent.Code == 5)
+        {
+            gameWord = (string)photonEvent.CustomData;
+        }
         // 이벤트 코드가 6인 경우에만 처리
         if (photonEvent.Code == 6)
         {
-            if (photonView.IsMine)
+            string[] Word = (string[])photonEvent.CustomData;
+            if (gameWord.Equals(Word[0]))
             {
-                string[] Word = (string[])photonEvent.CustomData;
-                if (gameWord.Equals(Word[0]))
+                if (currentCoroutine != null)
                 {
-                    photonView.RPC("EndTurn", RpcTarget.MasterClient); // 다음 턴을 시작 마스터 클라만 작동
+                    StopCoroutine(currentCoroutine);
+                    currentCoroutine = null;
+                }
 
-                    int viewID = int.Parse(Word[1]);
-                    photonView.RPC("AddPoint", RpcTarget.All, viewID);
+                if (photonView.IsMine)
+                {
+                    // 이벤트 코드 설정
+                    byte eventCode = 7;
+
+                    // Photon을 통해 이벤트로 전송
+                    PhotonNetwork.RaiseEvent(eventCode, Word, RaiseEventOptions.Default, SendOptions.SendUnreliable);
+
+                    photonView.RPC("EndTurn", RpcTarget.MasterClient); // 다음 턴을 시작 마스터 클라만 작동
                 }
             }
-        }
-    }
-    [PunRPC]
-    private void AddPoint(int viewID)
-    {
-        PhotonView foundView = PhotonNetwork.GetPhotonView(viewID);
-
-        if (foundView.IsMine)
-        {
-            Debug.Log(viewID);
-            point += 10;
-            point_txt.text = point.ToString();
         }
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
+using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -38,11 +38,28 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         RPCManager rpc = test.GetComponent<RPCManager>();
 
         rpc.RoomJoinRpc();
+        int Time_Count = PlayerPrefs.GetInt("Time_Count");
+        SetTime(Time_Count);
     }
+    public void SetTime(int time)
+    {
+        if (!PhotonNetwork.InRoom)  // 방에 들어가 있는지 확인
+            return;
 
+        PhotonHashTable roomSetting = PhotonNetwork.CurrentRoom.CustomProperties;
+        if (roomSetting.ContainsKey("PlayTime"))
+        {
+            roomSetting["PlayTime"] = time;
+        }
+        else
+        {
+            roomSetting.Add("PlayTime", time);
+        }
+        PhotonNetwork.CurrentRoom.SetCustomProperties(roomSetting);
+    }
     public void SetPlayerImage(string userImage)
     {
-        Hashtable customProperties = new Hashtable();
+        PhotonHashTable customProperties = new PhotonHashTable();
         customProperties["UserImage"] = userImage;
         PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
     }

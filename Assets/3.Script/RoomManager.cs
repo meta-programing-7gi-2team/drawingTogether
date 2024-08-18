@@ -54,10 +54,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
         NetworkManager.instance.SetPlayerImage(UserInfo_Manager.instance.info.User_Image);
 
         Player_Count = PlayerPrefs.GetInt("Player_Count");
-        Time_Count = PlayerPrefs.GetInt("Time_Count");
 
-        RoomOptions RoomSetting = new RoomOptions { MaxPlayers = Player_Count, PlayTime = Time_Count, IsVisible = true, IsOpen = true, EmptyRoomTtl = 0 };
-
+        RoomOptions RoomSetting = new RoomOptions { MaxPlayers = Player_Count, IsVisible = true, IsOpen = true, EmptyRoomTtl = 0 };
         PhotonNetwork.CreateRoom(Roominput.text == "" ? "Room" + Random.Range(0, 100) : Roominput.text, RoomSetting);
 
         SceneManager.sceneLoaded -= SceneLoaded;

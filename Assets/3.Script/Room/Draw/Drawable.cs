@@ -242,6 +242,8 @@ public class Drawable : MonoBehaviour
     //캔버스 초기화
     public void ResetCanvas()
     {
+        if (clean_colors_array == null) return;
+
         drawable_texture.SetPixels(clean_colors_array);
         drawable_texture.Apply();
         playerInput.ClearStack();

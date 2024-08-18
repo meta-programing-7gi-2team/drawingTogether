@@ -16,7 +16,10 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
     public Text word; // 각 플레이어
     public TMP_Text text;
     public Transform bubble; // 각 플레이어
+    public Text point; // 각 플레이어
     [SerializeField] private GameManager gameManager;
+
+    private string parentId;
 
     private void Start()
     {
@@ -35,6 +38,11 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
         input_F = inputs.GetComponent<InputField>();
         word = parentObject.transform.GetChild(3).transform.GetChild(0).GetComponent<Text>();
         bubble = parentObject.transform.GetChild(3).GetComponent<Transform>();
+        point = parentObject.transform.GetChild(2).GetComponent<Text>();
+        point.text = "0";
+
+        char lastChar = parentObject.name[parentObject.name.Length - 1];
+        parentId = lastChar.ToString();
     }
 
     private void Update()
@@ -97,7 +105,7 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
     [PunRPC]
     public void BubbleChat(string message)
     {
-        SendWord(message, photonView.ViewID); // 마스터에게 단어 발송
+        SendWord(message, parentId); // 마스터에게 단어 발송
 
         word.text = message;
 
@@ -105,11 +113,11 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
 
         Invoke("Close", 1.5f);
     }
-    private void SendWord(string word, int id)
+    private void SendWord(string word, string id)
     {
         string[] pak = new string[2];
         pak[0] = word;
-        pak[1] = id.ToString();
+        pak[1] = id;
 
         // 이벤트 코드 설정
         byte eventCode = 6;

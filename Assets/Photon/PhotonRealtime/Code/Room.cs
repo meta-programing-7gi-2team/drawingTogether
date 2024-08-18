@@ -260,18 +260,6 @@ namespace Photon.Realtime
         /// <summary>
         /// Gets a list of custom properties that are in the RoomInfo of the Lobby.
         /// This list is defined when creating the room and can't be changed afterwards. Compare: LoadBalancingClient.OpCreateRoom()
-        public int PlayTime
-        {
-            get
-            {
-                return this.playTime;
-            }
-            private set
-            {
-                this.playTime = value;
-            }
-        }
-
         /// </summary>
         /// <remarks>You could name properties that are not set from the beginning. Those will be synced with the lobby when added later on.</remarks>
         public string[] PropertiesListedInLobby
@@ -334,7 +322,6 @@ namespace Photon.Realtime
                 this.isVisible = options.IsVisible;
                 this.isOpen = options.IsOpen;
                 this.maxPlayers = options.MaxPlayers;
-                this.playTime = options.PlayTime;
                 this.propertiesListedInLobby = options.CustomRoomPropertiesForLobby;
                 //this.playerTtl = options.PlayerTtl;       // set via well known properties
                 //this.emptyRoomTtl = options.EmptyRoomTtl; // set via well known properties
