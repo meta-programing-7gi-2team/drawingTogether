@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Linq;
 
 public class RPCManager : MonoBehaviourPunCallbacks
 {
@@ -66,13 +67,17 @@ public class RPCManager : MonoBehaviourPunCallbacks
             string userImage = NetworkManager.instance.GetPlayerImage(PhotonNetwork.LocalPlayer);
 
             photonView.RPC("Room", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, userImage, TargetObject);
+
+            Start_Btu = Resources.FindObjectsOfTypeAll<GameObject>().FirstOrDefault(obj => obj.CompareTag("GameStart"));
+
+            Start_Btu.SetActive(true);
         }
         else
         {
             Invoke("Room_C", 0.5f);
-            
+
             Start_Btu = GameObject.FindGameObjectWithTag("GameStart");
-            
+
             Start_Btu.SetActive(false);
         }
     }

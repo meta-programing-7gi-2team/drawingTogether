@@ -4,9 +4,10 @@ using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 
-public class ImageReceiver : MonoBehaviour, IOnEventCallback
+public class DataReceiver : MonoBehaviour, IOnEventCallback
 {
     [SerializeField] private Image image;
+    [SerializeField] private Slider slider;
     public void OnEnable()
     {
         PhotonNetwork.AddCallbackTarget(this);
@@ -36,6 +37,11 @@ public class ImageReceiver : MonoBehaviour, IOnEventCallback
                 // UI Image 컴포넌트에 Sprite 할당
                 image.sprite = sprite;
             }
+        }
+        // 이벤트 코드가 4인 경우에만 처리
+        if (photonEvent.Code == 4)
+        {
+            slider.value = (float)photonEvent.CustomData;
         }
     }
 }

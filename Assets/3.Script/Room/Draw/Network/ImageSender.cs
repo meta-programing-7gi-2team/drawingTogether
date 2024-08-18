@@ -11,6 +11,6 @@ public class ImageSender : MonoBehaviour
         byte eventCode = 3;
 
         // Photon을 통해 이벤트로 바이트 배열 전송
-        PhotonNetwork.RaiseEvent(eventCode, imageBytes, RaiseEventOptions.Default, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent(eventCode, imageBytes, RaiseEventOptions.Default, SendOptions.SendUnreliable);
     }
 }

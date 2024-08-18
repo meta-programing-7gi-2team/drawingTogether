@@ -46,6 +46,10 @@ MonoBehaviour:
   - BubbleChat
   - PlayerTurnGame
   - StartTurn
+  - NextTurn
+  - RandomWord
+  - EndTurn
+  - AddPoint
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -7,7 +7,8 @@ using TMPro;
 using DG.Tweening;
 using Photon.Pun;
 using Photon.Realtime;
-
+using System;
+using ExitGames.Client.Photon;
 
 public class ChatBubbleControl : MonoBehaviourPunCallbacks
 {
@@ -96,17 +97,25 @@ public class ChatBubbleControl : MonoBehaviourPunCallbacks
     [PunRPC]
     public void BubbleChat(string message)
     {
-        Debug.Log(gameManager.gametext.text);
-        if (gameManager.gametext.text.Equals(message))
-        {
-            Debug.Log("정답입니다."); // 여기에 게임종료부분이 있어야한다.
-        }
+        SendWord(message, photonView.ViewID); // 마스터에게 단어 발송
 
         word.text = message;
 
         bubble.DOScale(Vector3.one, 0.2f);
 
         Invoke("Close", 1.5f);
+    }
+    private void SendWord(string word, int id)
+    {
+        string[] pak = new string[2];
+        pak[0] = word;
+        pak[1] = id.ToString();
+
+        // 이벤트 코드 설정
+        byte eventCode = 6;
+
+        // Photon을 통해 이벤트로 전송
+        PhotonNetwork.RaiseEvent(eventCode, pak, RaiseEventOptions.Default, SendOptions.SendReliable);
     }
 
     public void Close()

@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/1.Scene/IngameUI.unity
     guid: 1b3765ac801faee49a922c4c23cf57cf
-  - enabled: 1
+  - enabled: 0
     path: Assets/1.Scene/RandomWordScene.unity
     guid: 5e2cdf24f8d615046b9c6205809dda63
   m_configObjects: {}
