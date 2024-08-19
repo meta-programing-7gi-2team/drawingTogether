@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     [SerializeField] private GameObject InGameUI;
     [SerializeField] private GameObject InputField;
     [SerializeField] private PointReceiver pointReceiver;
+    [SerializeField] private Text TurnNickname;
     public Text Gametext { get; private set; }
     public Slider timeSlider { get; private set; }
     private Player currentPlayer;
@@ -35,7 +36,9 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         DrawingTool = Resources.FindObjectsOfTypeAll<GameObject>().FirstOrDefault(obj => obj.CompareTag("DrawingTool"));
         InGameUI = Resources.FindObjectsOfTypeAll<GameObject>().FirstOrDefault(obj => obj.CompareTag("GameUI"));
         InputField = Resources.FindObjectsOfTypeAll<GameObject>().FirstOrDefault(obj => obj.CompareTag("Input"));
+
         Gametext = InGameUI.transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        TurnNickname = InGameUI.transform.GetChild(0).transform.GetChild(3).GetComponent<Text>();
         timeSlider = InGameUI.transform.GetChild(0).transform.GetChild(2).GetComponent<Slider>();
         roundSetting = FindObjectOfType<GameRoundSetting>();
         pointReceiver = FindObjectOfType<PointReceiver>();
@@ -78,18 +81,17 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             currentPlayer = players_Q.Dequeue();
             players_Q.Enqueue(currentPlayer);
 
-            Debug.Log($"{currentPlayer.NickName}님의 턴입니다.");
-
-            photonView.RPC("PlayerTurnGame", RpcTarget.All, currentPlayer.ActorNumber);
+            photonView.RPC("PlayerTurnGame", RpcTarget.All, currentPlayer.ActorNumber, currentPlayer.NickName);
         }
     }
 
     [PunRPC]
-    private void PlayerTurnGame(int actorNumber)
+    private void PlayerTurnGame(int actorNumber, string NickName)
     {
         NetworkManager.instance.Game_Check = true;
 
         Gametext.text = string.Empty;
+        TurnNickname.text = NickName;
 
         if (PhotonNetwork.LocalPlayer.ActorNumber.Equals(actorNumber)) // 두개의 넘버가 동일하면 턴인 플레이어
         {
@@ -155,6 +157,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             StopCoroutine(currentCoroutine);
             currentCoroutine = null;
+            TurnNickname.text = string.Empty;
         }
         photonView.RPC("StartTurn", RpcTarget.MasterClient); // 다음 턴을 시작 마스터 클라만 작동
     }
@@ -178,13 +181,15 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                     currentCoroutine = null;
                 }
 
-                if (photonView.IsMine)
+                if (PhotonNetwork.IsMasterClient && photonView.IsMine)
                 {
                     // 이벤트 코드 설정
                     byte eventCode = 7;
 
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+
                     // Photon을 통해 이벤트로 전송
-                    PhotonNetwork.RaiseEvent(eventCode, Word, RaiseEventOptions.Default, SendOptions.SendUnreliable);
+                    PhotonNetwork.RaiseEvent(eventCode, Word, raiseEventOptions, SendOptions.SendUnreliable);
 
                     photonView.RPC("EndTurn", RpcTarget.MasterClient); // 다음 턴을 시작 마스터 클라만 작동
                 }

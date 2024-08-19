@@ -37,6 +37,7 @@ public class PointReceiver : MonoBehaviour, IOnEventCallback
     {
         PhotonNetwork.RemoveCallbackTarget(this);
     }
+
     public void OnEvent(EventData photonEvent)
     {
         // 이벤트 코드가 7인 경우에만 처리
