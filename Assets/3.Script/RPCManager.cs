@@ -14,23 +14,20 @@ public class RPCManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject Start_Btu;
     [SerializeField] private string TargetObject;
 
-    private void Start()
+    private void BubbleSort(GameObject[] arr)
     {
-        seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
-
-        int RoomMax = PhotonNetwork.CurrentRoom.MaxPlayers;
-
-        for (int i = 0; i < RoomMax; i++)
+        for (int i = 0; i < arr.Length - 1; i++)
         {
-            seatObjects[i].SetActive(true);
+            for (int j = 0; j < arr.Length - i - 1; j++)
+            {
+                if (arr[j].name.CompareTo(arr[j + 1].name) > 0)
+                {
+                    GameObject temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+            }
         }
-
-        for (int i = RoomMax; i < seatObjects.Length; i++)
-        {
-            seatObjects[i].SetActive(false);
-        }
-
-        seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
     }
 
     public void RoomJoinRpc()
@@ -40,6 +37,8 @@ public class RPCManager : MonoBehaviourPunCallbacks
             seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
 
             int RoomMax = PhotonNetwork.CurrentRoom.MaxPlayers;
+
+            BubbleSort(seatObjects);
 
             for (int i = 0; i < RoomMax; i++)
             {
