@@ -120,10 +120,12 @@ public class RPCManager : MonoBehaviourPunCallbacks
         foreach (GameObject seat in seatObjects)
         {
             Text playerNameText = seat.transform.GetChild(0).GetComponent<Text>();
+            Text playercount = seat.transform.GetChild(2).GetComponent<Text>();
 
             if (playerNameText.text == NickName)
             {
                 playerNameText.text = string.Empty;
+                playercount.text = string.Empty;
 
                 Image playerImage = seat.transform.GetChild(1).GetComponent<Image>();
                 playerImage.sprite = null;
