@@ -21,8 +21,8 @@ public class OptionExitControl : MonoBehaviour
 
     public void Room_Exit()
     {
-        SceneManager.LoadScene("MainScene");
         PhotonNetwork.LeaveRoom();
+        SceneManager.LoadScene("MainScene");
     }
 
     public void Game_Exit()

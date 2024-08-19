@@ -32,6 +32,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
         Sprite playerSprite = Resources.Load<Sprite>($"Player_Image/{UserInfo_Manager.instance.info.User_Image}");
         UserImage.sprite = playerSprite;
         Nickname.text = ($"{PhotonNetwork.NickName}");
+        
+        if(!PhotonNetwork.InLobby) Invoke("LobbyJoin", 0.5f);
+    }
+
+    private void LobbyJoin()
+    {
+        PhotonNetwork.JoinLobby();
     }
 
     public void Player_Count_T(int Player)

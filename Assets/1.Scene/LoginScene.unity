@@ -609,6 +609,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   test: {fileID: 0}
   roomName: 
+  Game_Check: 0
 --- !u!4 &128707547
 Transform:
   m_ObjectHideFlags: 0
@@ -1304,6 +1305,7 @@ MonoBehaviour:
   - {fileID: 770519793}
   - {fileID: 419120769}
   - {fileID: 2142951690}
+  texture: {fileID: 0}
 --- !u!114 &239804804
 MonoBehaviour:
   m_ObjectHideFlags: 0
