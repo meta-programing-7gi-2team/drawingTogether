@@ -106,3 +106,4 @@ MonoBehaviour:
   InGameUI: {fileID: 0}
   InputField: {fileID: 0}
   pointReceiver: {fileID: 0}
+  TurnNickname: {fileID: 0}
