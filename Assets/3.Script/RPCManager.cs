@@ -85,6 +85,20 @@ public class RPCManager : MonoBehaviourPunCallbacks
     {
         seatObjects = GameObject.FindGameObjectsWithTag("Player_Room");
 
+        int RoomMax = PhotonNetwork.CurrentRoom.MaxPlayers;
+
+        BubbleSort(seatObjects);
+
+        for (int i = 0; i < RoomMax; i++)
+        {
+            seatObjects[i].SetActive(true);
+        }
+
+        for (int i = RoomMax; i < seatObjects.Length; i++)
+        {
+            seatObjects[i].SetActive(false);
+        }
+
         foreach (GameObject seat in seatObjects)
         {
             if (seat.transform.childCount == 4)
