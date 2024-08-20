@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Random = System.Random;
 
-public class GameRoundSetting : MonoBehaviour
+public class RandomWordSetting : MonoBehaviour
 {
     //[SerializeField] private Text wordText;
     //[SerializeField] private Text roundText;

@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     private Player currentPlayer;
     private Queue<Player> players_Q = new Queue<Player>();
     private string gameWord = string.Empty;
-    private GameRoundSetting roundSetting;
+    private RandomWordSetting roundSetting;
     private Coroutine currentCoroutine;
 
     private void Start()
@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         Gametext = InGameUI.transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
         TurnNickname = InGameUI.transform.GetChild(0).transform.GetChild(3).GetComponent<Text>();
         timeSlider = InGameUI.transform.GetChild(0).transform.GetChild(2).GetComponent<Slider>();
-        roundSetting = FindObjectOfType<GameRoundSetting>();
+        roundSetting = FindObjectOfType<RandomWordSetting>();
         pointReceiver = FindObjectOfType<PointReceiver>();
 
         DrawingTool.SetActive(false);
